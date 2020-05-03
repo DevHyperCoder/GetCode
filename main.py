@@ -700,6 +700,6 @@ if __name__ == "__main__":
     # manager.add_command('db',MigrateCommand)
     # manager.run()
     # print("MIGRATE")
-    app.run(port=8080,debug=True)
+    app.run(port=8080)
     
     

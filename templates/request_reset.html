@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset Request</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <style>
+        .login-form {
+            width: 340px;
+            margin: 30px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark">
+
+        <!-- Links -->
+        <ul class="nav navbar">
+            <form action="/" methods="post" class="form-inline ml-auto">
+                <input type="text" class="form-control mr-sm-2" placeholder="Search">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ url_for( "home") }} '>Home</a></li>
+            <!-- <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li> -->
+
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="login-form">
+            <form action="{{url_for('reset_request')}}" method="POST">
+                <div class="form-group">
+                    <div class="from-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                    </div>
+                    <button type="submit" class="mt-2 btn btn-block btn-primary">Send Reset Email</button>
+                </div>
+            </form>f
+            {% if success %}
+            <div class="alert alert-success">
+                <p>{{ success }}</p>
+                <p>The Password reset email will wxipre in 30 miniters</p>
+            </div>
+            {%endif %} {% if error %}
+            <div class="alert alert-danger">
+                <p>{{ error }}</p>
+            </div>
+            {%endif %}
+
+        </div>
+    </div>
+
+</body>
+
+</html>

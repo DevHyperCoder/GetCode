@@ -1,0 +1,44 @@
+.login-form {
+    width: 340px;
+    margin: 30px auto;
+}
+
+.or-seperator {
+    margin: 20px 0 10px;
+    text-align: center;
+    vertical-align: middle;
+    border-top: 1px solid #ccc;
+}
+
+#textbox {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    overflow: auto;
+}
+
+.fab {
+    width: 70px;
+    height: 70px;
+    background-color: red;
+    border-radius: 50%;
+    box-shadow: 0 6px 10px 0 #666;
+    transition: all 0.1s ease-in-out;
+    font-size: 50px;
+    color: white;
+    text-align: center;
+    line-height: 70px;
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+}
+
+.fab:hover {
+    box-shadow: 0 6px 14px 0 #666;
+    transform: scale(1.05);
+}
+
+.green-border-focus .form-control:focus {
+    border: 1px solid #8bc34a;
+    box-shadow: 0 0 0 0.2rem rgba(139, 195, 74, .25);
+}

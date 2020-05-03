@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark">
+
+        <!-- Links -->
+        <ul class="nav navbar">
+            <form action="/" methods="post" class="form-inline ml-auto">
+                <input type="text" class="form-control mr-sm-2" placeholder="Search">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ url_for( "home") }} '>Home</a></li>
+            <!-- <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li> -->
+
+        </ul>
+    </nav>
+    <div class="container">
+        {% if error %}
+        <!-- error -->
+        {{ error }} {% else %}
+        <h1 class="display-3">{{ title }}</h1>
+        <form action='{{url_for("delete_snippet",id= id )}}' method="GET" class='form form-check-inline'>
+            <button class="btn btn-danger" type="submit">Delete Snippet</button>
+            <button class="btn btn-primary" type="submit" formaction="{{url_for('edit_snippet',id=id)}}">Edit</button>
+        </form>
+        <br>
+        <div>{{ desc|safe }}</div>
+        <br>
+        <pre><code>{{code}}</code></pre> {% endif %}
+        <div class="container">
+            <h2>Comments</h2>
+            <div class="row">
+                {%if current_user.is_authenticated%}
+                <div class="col-8">
+                    <div class="card card-white post">
+                        <div class="post-heading">
+                            <div class="float-left image">
+                                <img src="" class="img-circle avatar" alt="user profile image">
+                            </div>
+                            <div class="float-left meta">
+                                <div class="title h5">
+                                    <a href="#"><b>{{current_user.name}}</b></a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="post-description">
+                            <form action="" method="POST">
+                                <textarea required id='textbox' name="comment_body" id="comment_body" placeholder='Comment Here!' oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                                <button class="btn btn-block btn-primary" type="submit">Add Comment</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                {%else%}
+                <p>Log in to post Comments</p>
+                {% endif %} {%if length %} {%for i in range(0,length) %}
+                <div class="col-8">
+                    <div class="card card-white post">
+                        <div class="post-heading">
+                            <div class="float-left image">
+                                <img src="{{img[i]}}" class="img-circle avatar" alt="user profile image">
+                            </div>
+                            <div class="float-left meta">
+                                <div class="title h5">
+                                    <a href="#"><b>{{users[i]}}</b></a>
+                                </div>
+                                <h6 class="text-muted time">{{created_date[i]}}</h6>
+                            </div>
+                        </div>
+                        <div class="post-description">
+                            <p>{{comment[i]}}</p>
+
+                        </div>
+                    </div>
+                </div>
+                {%endfor%} {%endif%}
+
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+</body>
+
+</html>

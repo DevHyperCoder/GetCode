@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <title>Settings for {{current_user_name}}</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark">
+
+        <!-- Links -->
+        <ul class="nav navbar">
+            <!-- <form action="/settings" methods="get" id='form' class="form form-inline ml-auto">
+                <input id='livebox' type="text" name='search' class="form-control mr-sm-2" placeholder="Search">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form> -->
+            <!-- add search to settings -->
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ url_for( "home") }} '>Home</a></li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+
+        </ul>
+    </nav>
+    <div class="container">
+        <form action='/settings' method="POST">
+            <h1 class='display-1'>Public Profile</h1>
+            <input name='name' value={{current_user.username}}>
+            <button class='btn-block btn btn-dark-outline ' type='submit'>Change Settings</button>
+        </form>
+    </div>
+</body>
+
+</html>

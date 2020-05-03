@@ -328,7 +328,7 @@ def callback():
                 return "LOGIN WITH PASSWORD"
 
         else:
-            user = User(email=users_email,username=users_name,google_login=GOOGLE_LOGIN)
+            user = User(email=users_email,username=users_name,password=bcrypt.generate_password_hash('getcode'),google_login=GOOGLE_LOGIN)
             db.session.add(user)
             db.session.commit()
         

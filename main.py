@@ -322,19 +322,24 @@ def callback():
             # User log in
             user=User.query.filter_by(email=users_email).first()
             if user.google_login == GOOGLE_LOGIN:
-                login(user,remember=True)
+                login_user(user,remember=True)
                 return redirect(url_for('profile'))
             else:
+                # TODO add a xustom screen
                 return "LOGIN WITH PASSWORD"
 
         else:
+            # TODO Research if you should log the user in
             user = User(email=users_email,username=users_name,password=bcrypt.generate_password_hash('getcode'),google_login=GOOGLE_LOGIN)
             db.session.add(user)
             db.session.commit()
+            
+            
         
         return users_email + " NAME " +users_name
 
     else:
+
         return "User email not available or not verified by Google.", 400
 
 
@@ -429,7 +434,11 @@ def profile():
             title_array.append(snippet.name)
             description_array.append(snippet.description)
             id_array.append(snippet.id)
-        return render_template("dashboard.html", length=len(title_array), id_array=id_array, name_array=title_array, description_array=description_array)
+        return render_template("dashboard.html", 
+                                length=len(title_array),
+                                id_array=id_array,
+                                name_array=title_array, 
+                                description_array=description_array)
 
     else:
         return redirect(url_for('login'))

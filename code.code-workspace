@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": "..\\Financio"
+		}
+	],
+	"settings": {
+		"python.pythonPath": "venv\\Scripts\\python.exe"
+	}
+}

@@ -1,66 +1,29 @@
 import sys
 import traceback
 from datetime import date
-from flask import Flask, render_template, request, redirect, url_for,jsonify,g
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, logout_user, current_user, login_required,UserMixin
-from flask_bcrypt import Bcrypt
+from flask import render_template, request, redirect, url_for,jsonify,g
+from flask_login import  login_user, logout_user, current_user, login_required,UserMixin
 import os
-from flask_mail import Mail,Message
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 import json
 from functools import wraps
 
-from oauthlib.oauth2 import WebApplicationClient
+
 import requests
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 
-PUBLIC = 1
-PRIVATE =0
-GOOGLE_LOGIN = 1
-FACEBOOK_LOGIN = 2
-GITHUB_LOGIN=3
+from getcode.models import User,Comments,Snippet
+from getcode import app
+from getcode import db
 
-MAINTANCE_MODE = os.environ.get('MAINTANCE_MODE')
+from getcode import mail,bcrypt,login_manager
+from getcode import MAINTANCE_MODE,PUBLIC,PRIVATE
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-app = Flask(__name__)
-app.config['SECRET_KEY'] = "getcode"
-
-# Configuration for Google Login
-GOOGLE_CLIENT_ID = os.environ.get("CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("CLIENT_SECRET", None)
-GOOGLE_DISCOVERY_URL = (
-    "https://accounts.google.com/.well-known/openid-configuration"
-)
-
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
-
-# BCRYPT Setup
-bcrypt = Bcrypt(app)
-
-# Login Manager Setup
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-# Databse config
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-# Database initilisation
-db = SQLAlchemy()
-
-# Flask-Mail setup to use GMail
-app.config['MAIL_SERVER']=os.environ.get('MAIL_SERVER')
-app.config['MAIL_PORT']=os.environ.get('MAIL_PORT')
-app.config['MAIL_USE_TLS']=True
-app.config['MAIL_USERNAME']=os.environ.get('MAIL_USERNAME')
-app.config['MAIL_PASSWORD']=os.environ.get('MAIL_PASSWORD')
-
-mail = Mail(app)
 
 def maintance(f):
     @wraps(f)
@@ -69,74 +32,7 @@ def maintance(f):
             return render_template('maintance.html')
         return f(*args, **kwargs)
     return decorated_function
-    
-
-class User(db.Model, UserMixin):
-    """Model for user accounts."""
-
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer,
-                   primary_key=True)
-    username = db.Column(db.String,
-                         nullable=False,
-                         unique=False)
-    email = db.Column(db.String(40),
-                      unique=True,
-                      nullable=False)
-    password = db.Column(db.String(200),
-                         primary_key=False,
-                         unique=False,
-                         nullable=False)
-    google_login=db.Column(db.Integer,unique=False,nullable=False)
-
-    def get_reset_token(self,expires_sec=1800):
-        # defualtis 30min
-        s=Serializer(app.config['SECRET_KEY'],expires_sec)
-        return s.dumps({"user_id": self.id}).decode('utf-8')
-
-    @staticmethod
-    def verifiy_reset_token(token):
-        s=Serializer(app.config['SECRET_KEY'])
-        try:
-            user_id = s.loads(token)['user_id']
-        except:
-            return None
-        return User.query.get(user_id)
-
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
-
-class Snippet(db.Model):
-    __tablename__ = 'code_snippets'
-    __searchable__ =['name','description','code','email','tags']
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False, unique=True)
-    description = db.Column(db.String, nullable=False, unique=False)
-    email = db.Column(db.String(40),
-                      unique=False,
-                      nullable=False)
-    code = db.Column(db.String, unique=False, nullable=False)
-    created_date = db.Column(db.String, nullable=False, unique=False)
-    likes = db.Column(db.Integer, primary_key=False,
-                      nullable=False, unique=False)
-    liked_users=db.Column(db.String,nullable = True,unique=False)
-    comments = db.Column(db.String, nullable=True, unique=False)
-    tags = db.Column(db.String,nullable=True,unique=False)
-    visibility  =db.Column(db.Integer,nullable = True)
-
-class Comments(db.Model):
-    __tablename__='comments'
-    id = db.Column(db.Integer, primary_key=True)
-    email_of_commenter = db.Column(db.String(40),
-                      unique=False,
-                      nullable=False)
-    created_date = db.Column(db.String, nullable=False, unique=False)
-    comment = db.Column(db.String, nullable=False, unique=False)
-    post_name = db.Column(db.String, nullable=False, unique=False)
-
-db.init_app(app)
-
+  
 @login_manager.user_loader
 def     load_user(user_id):
     return User.query.get(user_id)
@@ -169,6 +65,7 @@ def reset_request():
             return render_template("request_reset.html",error="No users have registered with this email address")
             
     return render_template("request_reset.html")
+
 
 @app.route("/reset_password/<token>",methods=['get','post'])
 def reset_password(token):
@@ -447,7 +344,8 @@ def profile():
     else:
         return redirect(url_for('login'))
 
-
+# ---------------------------------------------------------------------------------------------------
+# app
 @app.route("/new/create", methods=['GET', 'POST'])
 def create_new_snippet():
     
@@ -496,19 +394,17 @@ def edit_snippet(id):
     snipept = Snippet.query.filter_by(id=id).first()
 
     if request.method=='POST':
-        title = request.form['title']
-        desc = request.form['desc']
-        code = request.form['code']
+        
         visibility = request.form['visibility']
         vis = PRIVATE
         if visibility == 'Public':
             vis = PUBLIC
         
-        snipept.name=title
-        snipept.description=desc
-        snipept.code=code
+        snipept.name=request.form['title']
+        snipept.description=request.form['desc']
+        snipept.code=request.form['code']
         snipept.visibility=vis
-
+        
         db.session.commit()
 
         return redirect(url_for('view',id=id))
@@ -546,7 +442,7 @@ def delete_snippet(id):
         return 'not currecrt user or snippet'
     
     if request.method=='POST':
-        print("GOING TO DELETE APP")
+        print("GOING TO DELETE app")
         if request.form['name'] != snippet.name:
             return render_template('delete_snippet.html',id=snippet.id,name=snippet.name,error="E-NAME")
         db.session.delete(snippet)
@@ -556,13 +452,11 @@ def delete_snippet(id):
     return render_template('delete_snippet.html',id=snippet.id,name=snippet.name)
 
 
-@app.route("/view/<int:id>",methods=['GET','POST','DELETE'])
+@app.route("/view/<int:id>",methods=['GET','POST'])
 def view(id):
     snippet = Snippet.query.filter_by(id=id).first()
     
     if snippet.visibility==PUBLIC:
-        
-
         if request.method=='POST':
             if current_user.is_authenticated == False:
                 return render_template("view_snippet.html",id = snippet.id, title=snippet.name, desc=snippet.description, code=snippet.code,comment_error="lease log in inodred to psot a cometn")
@@ -577,7 +471,6 @@ def view(id):
                 db.session.add(comment)
                 db.session.commit()
             
-
         comments = Comments.query.filter_by(post_name=snippet.name).all()
         if comments == None:
             if current_user.is_authenticated:
@@ -709,15 +602,3 @@ def like_snippet():
         if where is "home":
             return redirect(url_for('home'))
         return redirect(url_for('profile'))
-
-
-if __name__ == "__main__":
-    # Comment out for migration NULL Value cant
-    # migrate = Migrate(app,db)
-    # manager = Manager(app)
-    # manager.add_command('db',MigrateCommand)
-    # manager.run()
-    # print("MIGRATE")
-    app.run(port=8080)
-    
-    

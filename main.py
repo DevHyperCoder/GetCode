@@ -330,19 +330,17 @@ def callback():
 
         else:
             # TODO Research if you should log the user in
-            user = User(email=users_email,username=users_name,password=bcrypt.generate_password_hash('getcode'),google_login=GOOGLE_LOGIN)
+            user = User(email=users_email,
+                        username=users_name,
+                        password=bcrypt.generate_password_hash('getcode'),
+                        google_login=GOOGLE_LOGIN)
             db.session.add(user)
             db.session.commit()
-            
-            
-        
-        return users_email + " NAME " +users_name
+            login_user(user)
+            return redirect(url_for('profile'))
 
     else:
-
         return "User email not available or not verified by Google.", 400
-
-
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -373,30 +371,37 @@ def logout():
     logout_user()
     return redirect(url_for("home"))
 
+def does_user_exist(email=None, username=None):
+    if email is not None:
+        # Email is given
+        return db.session.query(db.exists().where(
+            User.email == email)).scalar()
+    
+    if username is not None:
+        # Username is given
+        return db.session.query(db.exists().where(
+            User.username==username)).scalar()
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     if request.method == 'POST':
-        # print("REQUEST")
         password = request.form['password']
         hashed_pass = bcrypt.generate_password_hash(password).decode('utf-8')
-
-        username_exists = db.session.query(db.exists().where(
-            User.email == request.form['name'])).scalar()
+        username_exists = does_user_exist(username =  request.form['name'])
         if username_exists:
             print('u')
             return render_template("signup.html", username_error="Account exists")
 
-        email_exists = db.session.query(db.exists().where(
-            User.email == request.form['email'])).scalar()
+        email_exists = does_user_exist(email= request.form['email'])
         if email_exists:
             print('e')
             return render_template("signup.html", email_eror="Account exists")
 
-        user = User(
-            username=request.form['name'], email=request.form['email'], password=hashed_pass)
+        user = User(username=request.form['name'],
+                    email=request.form['email'], 
+                    password=hashed_pass)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -423,7 +428,6 @@ def profile():
                     all_snippets.append(snippet)
 
         if len(all_snippets) is None or len(all_snippets) is 0:
-            # User has no snippets
             return render_template("dashboard.html", empty=True, length=0, snippets=[0])
 
         title_array = []
@@ -444,7 +448,7 @@ def profile():
         return redirect(url_for('login'))
 
 
-@app.route("/new/create", methods=['get', 'post'])
+@app.route("/new/create", methods=['GET', 'POST'])
 def create_new_snippet():
     
     if not current_user.is_authenticated:
@@ -460,8 +464,13 @@ def create_new_snippet():
         vis = PRIVATE
         if visibility == 'Public':
             vis = PUBLIC
-        snippet = Snippet(name=title, description=desc, email=email,
-                          code=code, created_date=created_date ,likes=0, comments='',visibility = vis)
+        snippet = Snippet(name=title, 
+        description=desc, email=email,
+                          code=code, 
+                          created_date=created_date,
+                          likes=0,
+                          comments='',
+                          visibility = vis)
         db.session.add(snippet)
         db.session.commit()
     return render_template('new_snippet.html')

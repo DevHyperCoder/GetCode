@@ -3,7 +3,9 @@ from flask import Blueprint,request,render_template,url_for,redirect
 from getcode.models import Snippet,User,Comments
 from getcode import PUBLIC,PRIVATE
 
-snippet_view = Blueprint('snippet_view','snippet_view')
+from flask_login import current_user
+
+snippet_view = Blueprint('snippet_view',__name__)
 
 @snippet_view.route("/view/<int:id>",methods=['GET','POST'])
 def view(id):
@@ -108,7 +110,7 @@ def view(id):
 @snippet_view.route('/edit/<int:id>',methods=['GET','POST'])
 def edit_snippet(id):
     if not current_user.is_authenticated:
-        return redirect(url_for('login'))
+        return redirect(url_for('authentication_views.login'))
     
     snipept = Snippet.query.filter_by(id=id).first()
 
@@ -139,7 +141,7 @@ def edit_snippet(id):
 @snippet_view.route("/new/",methods=['get','post'])
 def preview_new_snippet():
     if not current_user.is_authenticated:
-        return redirect(url_for('login'))   
+        return redirect(url_for('authentication_views.login'))   
 
     if not request.method == "POST":
         return render_template("new_snippet.html")
@@ -152,7 +154,7 @@ def preview_new_snippet():
 @snippet_view.route('/delete/<int:id>',methods=['GET','POST','DELETE'])
 def delete_snippet(id):
     if not current_user.is_authenticated:
-        return redirect(url_for('login'))
+        return redirect(url_for('authentication_views.login'))
 
     snippet  = Snippet.query.filter_by(id=id).first()
 
@@ -179,7 +181,7 @@ def like_snippet():
         if id is None:
             if where is "home":
                 return redirect(url_for('home'))
-            return redirect(url_for('profile'))
+            return redirect(url_for('auth_view.profile'))
         snippet=Snippet.query.filter_by(id=id).first()
         snippet.likes = snippet.likes + 1
         
@@ -191,7 +193,7 @@ def like_snippet():
             print("Already liked")
             if where is "home":
                 return redirect(url_for('home'))
-            return redirect(url_for('profile'))
+            return redirect(url_for('auth_view.profile'))
 
         
 
@@ -209,13 +211,13 @@ def like_snippet():
         db.session.commit()
         if where is "home":
             return redirect(url_for('home'))
-        return redirect(url_for('profile'))
+        return redirect(url_for('auth_view.profile'))
 
 @snippet_view.route("/new/create", methods=['GET', 'POST'])
 def create_new_snippet():
     
     if not current_user.is_authenticated:
-        return redirect(url_for('login'))
+        return redirect(url_for('authentication_views.login'))
 
     if request.method == 'POST':
         title = request.form['title']

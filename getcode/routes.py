@@ -1,18 +1,8 @@
-import sys
 import traceback
-from datetime import date
-from flask import render_template, request, redirect, url_for,jsonify,g
-from flask_login import  login_user, logout_user, current_user, login_required,UserMixin
-import os
+from flask import render_template, request
+from flask_login import current_user
 
-from werkzeug.security import generate_password_hash, check_password_hash
-
-import json
 from functools import wraps
-
-import requests
-
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 from getcode.models import User,Comments,Snippet
 from getcode import app,db
@@ -27,9 +17,6 @@ def maintance(f):
             return render_template('maintance.html')
         return f(*args, **kwargs)
     return decorated_function
-  
-
-
 
 @app.route("/",methods=['GET','POST'])
 @maintance
@@ -85,7 +72,15 @@ def home():
                            created_by_array=created_by_array, 
                            nav_params=nav_params)
 
+@app.route("/about-us")
+@maintance
+def about_us():
+    return "About Us"
 
+@app.route("/contact-us")
+@maintance
+def contact_us():
+    return "Contact Us"
 
 
 

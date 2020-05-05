@@ -16,7 +16,7 @@
             <form action="/signup" method="POST">
                 <h2 class="text-center">Sign Up</h2>
                 <div class="text-center social-btn">
-                    <a href="{{url_for('google_login')}}" class="btn btn-danger btn-block"><i class="fa fa-google"></i>
+                    <a href="{{url_for('authentication_views.google_login')}}" class="btn btn-danger btn-block"><i class="fa fa-google"></i>
                         Sign in with <b>Google</b></a>
                 </div>
 
@@ -36,7 +36,7 @@
                     <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email"> {% if email_eror %}
 
                     <div class="alert alert-warning alert-dismissible fade show">
-                        <strong>Warning!</strong> This email address has a account associated with it. Please enter a different emial address or <a href="{{url_for('login')}}">login</a>
+                        <strong>Warning!</strong> This email address has a account associated with it. Please enter a different emial address or <a href="{{url_for('authentication_views.login')}}">login</a>
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                     </div> {% endif %}
                 </div>
@@ -47,7 +47,7 @@
 
                 <button type="submit" class="btn btn-block btn-primary">SIGNUP</button>
                 <div class="clearfix mt-2">
-                    <a href="{{ url_for('login') }}" class="text-center text-success">Already have a account?</a>
+                    <a href="{{ url_for('authentication_views.login') }}" class="text-center text-success">Already have a account?</a>
                 </div>
 
             </form>

@@ -1,9 +1,15 @@
-from flask import Blueprint
+from flask import Blueprint,request,redirect,render_template,url_for
 
+from flask_login import login_user,logout_user,current_user
 
 from getcode import login_manager,bcrypt
 from getcode import db
 from getcode.models import User
+
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
 
 authentication_views = Blueprint('authentication_views',__name__)
 
@@ -12,8 +18,6 @@ def get_google_provider_cfg():
 
 @authentication_views.route("/google/login",methods=['get','post'])
 def google_login():
-    
-
     # Find out what URL to hit for Google login
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
@@ -81,7 +85,7 @@ def callback():
                 login_user(user,remember=True)
                 return redirect(url_for('profile'))
             else:
-                # TODO add a xustom screen
+                # TODO add a custom screen
                 return "LOGIN WITH PASSWORD"
 
         else:

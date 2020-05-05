@@ -21,9 +21,7 @@
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class='nav-item'>
-                <a class='nav-link' href='{{ url_for( "home") }} '>Home</a></li>
-
-
+                <a class='nav-link' href='{{ url_for("home") }} '>Home</a></li>
         </ul>
     </nav>
     <div class="container">
@@ -31,7 +29,7 @@
             <form action="/login" method="POST">
                 <h2 class="text-center">Log In</h2>
                 <div class="text-center social-btn">
-                    <a href="{{url_for('google_login')}}" class="btn btn-danger btn-block"><i class="fa fa-google"></i> Sign in with <b>Google</b></a>
+                    <a href="{{url_for('authentication_views.google_login')}}" class="btn btn-danger btn-block"><i class="fa fa-google"></i> Sign in with <b>Google</b></a>
                 </div>
                 <div class="or-seperator"><i>or</i></div>
                 <div class="form-group">
@@ -45,10 +43,10 @@
                 <button type="submit" class="btn btn-primary btn-block">LOG IN</button>
                 <div class="clearfix mt-2">
                     <label class="pull-left checkbox-inline"><input name='remember' value="off" type="checkbox"> Remember me</label>
-                    <a href="{{ url_for('reset_request') }}" class="float-right text-success">Forgot Password?</a>
+                    <a href="{{ url_for('authentication_views.reset_request') }}" class="float-right text-success">Forgot Password?</a>
                 </div>
             </form>
-            <div class="text-muted text-center mt-2 small">Don't have an account? <a href="{{url_for('signup')}}" class="text-success">Register Now!</a></div>
+            <div class="text-muted text-center mt-2 small">Don't have an account? <a href="{{url_for('authentication_views.signup')}}" class="text-success">Register Now!</a></div>
         </div>
     </div>
 </body>

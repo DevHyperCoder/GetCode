@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
     <title>GetCode</title>
 </head>
 
@@ -63,10 +62,9 @@
                     </div>
                     {% if current_user.is_authenticated %}
                     <div class="card-block">
-                        <form class='form-inline' action="" method="POST">
-
-                            <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('like_snippet',id=snippet_array[i].id,where='home')}}">LIKE</button>
-                            <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('view',id=snippet_array[i].id)}}">Go to Snippet</button>
+                        <form class='form-inline' action="/" method="POST">
+                            <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.like_snippet',id=snippet_array[i].id,where='home')}}">LIKE</button>
+                            <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].id)}}">Go to Snippet</button>
                         </form>
                     </div>
                     {% else %}

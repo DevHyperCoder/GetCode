@@ -1,15 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import os
-
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail,Message
 
 from oauthlib.oauth2 import WebApplicationClient
 
-from getcode.snippet_view import snippet_view
 
+
+import os
 
 PUBLIC = 1
 PRIVATE = 0
@@ -40,11 +39,23 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 bcrypt = Bcrypt(app)
 
+from getcode.models import User
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-app.register_blueprint(snippet_view)
+@login_manager.user_loader
+def user_loader(user_id):
+    return User.query.get(user_id)
 
+
+from getcode.snippet_view import snippet_view
+from getcode.auth_view import auth_view
+from getcode.authentication_views import authentication_views
+
+app.register_blueprint(snippet_view)
+app.register_blueprint(auth_view)
+app.register_blueprint(authentication_views)
 
 
 from getcode import routes

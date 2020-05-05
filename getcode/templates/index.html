@@ -72,7 +72,7 @@
                     {% else %}
                     <div class="card-block">
                         <form class="form-inline" action="" method="POST">
-                            <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('view',id=snippet_array[i].id)}}">Go to Snippet</button>
+                            <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].id)}}">Go to Snippet</button>
                         </form>
                     </div>
                     {% endif %}

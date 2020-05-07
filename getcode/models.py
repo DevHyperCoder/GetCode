@@ -42,7 +42,6 @@ class User(db.Model, UserMixin):
 
 class Snippet(db.Model):
     __tablename__ = 'code_snippets'
-    __searchable__ =['name','description','code','email','tags']
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
     description = db.Column(db.String, nullable=False, unique=False)

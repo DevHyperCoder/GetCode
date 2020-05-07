@@ -5,6 +5,8 @@ from getcode import PUBLIC,PRIVATE
 
 from flask_login import current_user
 
+from getcode import db
+
 snippet_view = Blueprint('snippet_view',__name__)
 
 @snippet_view.route("/view/<int:id>",methods=['GET','POST'])
@@ -55,7 +57,8 @@ def view(id):
                                 code=snippet.code,
                                 length = len(dates),
                                 users=usernames,
-                                comment = text,img=img,
+                                comment = text,
+                                img=img,
                                 created_date =dates)
 
     else:
@@ -65,7 +68,6 @@ def view(id):
             if current_user.is_authenticated == False:
                 return render_template("view_snippet.html", id=snippet.id , title=snippet.name, desc=snippet.description, code=snippet.code,comment_error="lease log in inodred to psot a cometn")
             if 'comment_body' in request.form:
-                print("PRESENT")
                 comment=Comments.query.filter_by(comment=request.form['comment_body']).first()
                 if comment is not None:
                     return render_template("view_snippet.html", id=snippet.id, title=snippet.name, desc=snippet.description, code=snippet.code,comment_error="can;'post same commetn")         
@@ -159,10 +161,10 @@ def delete_snippet(id):
     snippet  = Snippet.query.filter_by(id=id).first()
 
     if snippet.email != current_user.email:
-        return 'not currecrt user or snippet'
+        # Return a nice error message
+        return render_template('delete_snippet.html',email_error='user')
     
     if request.method=='POST':
-        print("GOING TO DELETE app")
         if request.form['name'] != snippet.name:
             return render_template('delete_snippet.html',id=snippet.id,name=snippet.name,error="E-NAME")
         db.session.delete(snippet)

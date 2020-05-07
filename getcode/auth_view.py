@@ -1,4 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint,request,render_template,redirect,url_for
+
+from getcode.models import Snippet
+
+from flask_login import current_user 
 
 auth_view= Blueprint('auth_view',__name__)
 

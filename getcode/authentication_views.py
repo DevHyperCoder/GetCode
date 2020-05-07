@@ -105,7 +105,7 @@ def callback():
 @authentication_views.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("profile"))
+        return redirect(url_for("auth_view.profile"))
     if request.method == "POST":
         user = db.session.query(db.exists().where(
             User.email == request.form['email'])).scalar()
@@ -118,7 +118,8 @@ def login():
                 if 'remember'  in request.form:
                     remember = True
                 login_user(user, remember=remember)  
-                return redirect(url_for("profile"))
+                return redirect(url_for("auth_view.profile"))
+        return render_template('login.html',error='sdf')
 
     return render_template("login.html")
 

@@ -47,6 +47,12 @@
                 </div>
             </form>
             <div class="text-muted text-center mt-2 small">Don't have an account? <a href="{{url_for('authentication_views.signup')}}" class="text-success">Register Now!</a></div>
+            <br> {% if error %}
+            <div class="alert alert-error alert-dismissible fade show">
+                <strong>Error!</strong>
+                <p>The username or password seem to be incorrect</p>
+            </div>
+            {%endif%}
         </div>
     </div>
 </body>

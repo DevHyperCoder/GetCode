@@ -1,5 +1,5 @@
-from flask import Blueprint,request,redirect,render_template,url_for,requests
-
+from flask import Blueprint,request,redirect,render_template,url_for
+import requests
 from flask_login import login_user,logout_user,current_user
 
 from getcode import login_manager,bcrypt
@@ -164,7 +164,7 @@ def signup():
                     password=hashed_pass)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('login'))
+        return redirect(url_for('authentication_views.login'))
 
     return render_template("signup.html")
 

@@ -1,7 +1,11 @@
-import os
+import os,secrets
 
 # Flask App Config
 SECRET_KEY = os.environ.get('SECRET_KEY')
+
+if SECRET_KEY is "" or SECRET_KEY is None:
+    # Set up a random
+    SECRET_KEY=os.urandom(16)
 
 
 # Databse config

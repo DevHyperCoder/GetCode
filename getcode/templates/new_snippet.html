@@ -7,6 +7,14 @@
     <title>Create a new Snippet</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .blue-focus {
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -21,10 +29,10 @@
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/dashboard">Dashboard</a>
+                <a class="nav-link" href={{ url_for( "auth_view.profile") }}>Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
+                <a class="nav-link" href={{ url_for( "authentication_views.logout") }}>Logout</a>
                 <!-- TODO Change this to url_for -->
             </li>
         </ul>
@@ -36,15 +44,15 @@
             {%else %}
             <form action="{{ url_for('snippet_view.create_new_snippet') }}" method="POST">
                 {%endif%}
-                <div class="form-group green-border-focus">
+                <div class="form-group ">
                     <label for='title'>Title</label>
                     <input required class='form-control' type="text" name='title' value="{% if title %}{{title}}{% endif %}" placeholder="Title">
                 </div>
-                <div class="form-group green-border-focus">
+                <div class="form-group ">
                     <label for="desc">Description</label>
-                    <textarea id="textbox" name="desc" placeholder="Description" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if desc %}{{desc}}{%endif%}</textarea>
+                    <textarea id="textbox" name="desc" placeholder="Description" class="blue-focus" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if desc %}{{desc}}{%endif%}</textarea>
                 </div>
-                <div class="form-group green-border-focus">
+                <div class="form-group ">
                     <label for="code">Enter your code</label>
                     <textarea required id='textbox' name="code" placeholder="Code" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if code %}{{code}}{%endif%}</textarea>
                 </div>

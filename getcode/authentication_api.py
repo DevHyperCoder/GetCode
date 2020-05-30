@@ -1,5 +1,5 @@
 from getcode import app,db
-
+from getcode.models import User
 from flask import Blueprint,request,redirect,url_for
 
 authentication_api = Blueprint('authentication_api',__name__)

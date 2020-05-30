@@ -1,5 +1,5 @@
 import traceback
-from flask import render_template, request
+from flask import render_template, request,url_for
 from flask_login import current_user
 
 from functools import wraps
@@ -72,28 +72,6 @@ def contact_us():
     # TODO add a contact us page
     return "Contact Us"
 
-
-
-
-
-
-# ---------------------------------------------------------------------------------------------------
-# app
-
-    
-
-html_escape_table = {
-    "&": "&amp;",
-    '"': "&quot;",
-    "'": "&apos;",
-    ">": "&gt;",
-    "<": "&lt;",
-    }
-   
-def html_escape(text):
-    """Produce entities within text."""
-    return "".join(html_escape_table.get(c,c) for c in text)
-from flask import url_for
 
 def has_no_empty_params(rule):
     defaults = rule.defaults if rule.defaults is not None else ()

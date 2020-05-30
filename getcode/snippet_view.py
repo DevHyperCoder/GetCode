@@ -115,9 +115,17 @@ def edit_snippet(id):
         return redirect(url_for('authentication_views.login'))
     
     snipept = Snippet.query.filter_by(id=id).first()
-
+    if snipept.email != current_user.email:
+        # Return a nice error message
+        return render_template('new_snippet.html',
+                            edit=True,
+                            id=id,
+                            snippet=snipept,
+                            title=snipept.name,
+                            desc=snipept.description,
+                            code=snipept.code,email_error='sadf')
     if request.method=='POST':
-        
+        i
         visibility = request.form['visibility']
         vis = PRIVATE
         if visibility == 'Public':
@@ -153,7 +161,7 @@ def preview_new_snippet():
                                 desc = request.form['desc'],
                                 code=request.form['code'])
 
-@snippet_view.route('/delete/<int:id>',methods=['GET','POST','DELETE'])
+@snippet_view.route('/delete/<int:id>',methods=['GET','POST'])
 def delete_snippet(id):
     if not current_user.is_authenticated:
         return redirect(url_for('authentication_views.login'))
@@ -173,13 +181,19 @@ def delete_snippet(id):
 
     return render_template('delete_snippet.html',id=snippet.id,name=snippet.name)
 
-@snippet_view.route('/like',methods=['get','post'])
+@snippet_view.route('/like',methods=['post'])
 def like_snippet():
+    
+    if not current_user.is_authenticated:
+        where = request.args.get('where','home')
+        if where is "home":
+                return redirect(url_for('home'))
+        return redirect(url_for('auth_view.profile')) 
     if request.method == 'POST':
         id=request.args.get('id', None)
         where = request.args.get('where','home')
         email = current_user.email
-        
+        print(where)
         if id is None:
             if where is "home":
                 return redirect(url_for('home'))

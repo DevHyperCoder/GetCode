@@ -44,10 +44,10 @@ def profile():
                                 description_array=description_array)
 
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('authentication_views.login'))
 
 @auth_view.route('/settings')
 def settings():
     if not current_user.is_authenticated:
-        return redirect(url_for('login'))
+        return redirect(url_for('authentication_views.login'))
     return render_template('settings.html',current_user_name=current_user.username)

@@ -1,4 +1,4 @@
-from getcode import app
+from getcode import app,db
 
 from flask import Blueprint,request,redirect,url_for
 

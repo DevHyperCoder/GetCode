@@ -46,9 +46,8 @@ def profile():
     else:
         return redirect(url_for('login'))
 
-@auth_view.route('/settings',methods=['GET','POST'])
+@auth_view.route('/settings')
 def settings():
-    # TODO remove post if not necessary
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     return render_template('settings.html',current_user_name=current_user.username)

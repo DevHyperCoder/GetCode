@@ -1,7 +1,7 @@
 from flask import Blueprint
 from getcode.models import User,Snippet
 from getcode.routes import PUBLIC,PRIVATE
-
+from getcode import db
 snippet_api=Blueprint('snippet_api',__name__)
 
 @snippet_api.route("/api/<token>/snippets/all")

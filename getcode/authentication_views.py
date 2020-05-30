@@ -8,7 +8,7 @@ from getcode.models import User
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask_mail import Message
 
 
 authentication_views = Blueprint('authentication_views',__name__)
@@ -90,6 +90,7 @@ def callback():
 
         else:
             # TODO Research if you should log the user in
+            # i gues we should just do that
             user = User(email=users_email,
                         username=users_name,
                         password=bcrypt.generate_password_hash('getcode'),

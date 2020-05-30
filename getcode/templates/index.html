@@ -57,7 +57,7 @@
                 <div class="card" style="width: 20rem;">
                     <div class="card-body">
                         <h4 class="card-title">{{ snippet_array[i].name }}</h4>
-                        <p class="card-subtitle text-muted">By: {{ created_by_array[i] }}</p>
+                        <p class="card-subtitle text-muted">By: {{ snippet_array[i].created_by_username }}</p>
                         <p class="card-text">{{ snippet_array[i].description }}</p>
                     </div>
                     {% if current_user.is_authenticated %}

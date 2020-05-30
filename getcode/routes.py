@@ -40,7 +40,6 @@ def home():
                 all_snippets.append(snippet)
 
     show_snippet_array = []
-    created_by_array = []
 
     if len(all_snippets) < 1:
         # Empty
@@ -48,38 +47,29 @@ def home():
 
     for snippet in all_snippets:
         try:
-            
             if snippet.name is None or snippet.name is "":
                 continue
-
-            email = snippet.email
-            email_exists = db.session.query(db.exists().where(
-                User.email == email)).scalar()
             vis = snippet.visibility
-            if email_exists and vis == PUBLIC:
-                user = User.query.filter_by(email=email).first()
-                username = user.username
-                created_by_array.append(username)
+            if vis == PUBLIC:
                 show_snippet_array.append(snippet)
-
-
         except:
             print("EXCEPTION")
             print(traceback.format_exc())
 
     return render_template("index.html",
                            snippet_array=show_snippet_array,
-                           created_by_array=created_by_array, 
                            nav_params=nav_params)
 
 @app.route("/about-us")
 @maintance
 def about_us():
+    # TODO add a about us page
     return "About Us"
 
 @app.route("/contact-us")
 @maintance
 def contact_us():
+    # TODO add a contact us page
     return "Contact Us"
 
 

@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from getcode import db
 from getcode import app
 from flask_login import UserMixin
@@ -22,6 +22,7 @@ class User(db.Model, UserMixin):
                          unique=False,
                          nullable=False)
     google_login=db.Column(db.Integer,unique=False,nullable=False)
+
 
     def get_reset_token(self,expires_sec=1800):
         # defualtis 30min
@@ -56,6 +57,9 @@ class Snippet(db.Model):
     comments = db.Column(db.String, nullable=True, unique=False)
     tags = db.Column(db.String,nullable=True,unique=False)
     visibility  =db.Column(db.Integer,nullable = True)
+    created_by_username=db.Column(db.String,
+                         nullable=False,
+                         unique=False)
 
 class Comments(db.Model):
     __tablename__='comments'

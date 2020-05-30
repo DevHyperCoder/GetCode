@@ -4,7 +4,7 @@ from flask import Blueprint,request,redirect,url_for
 
 authentication_api = Blueprint('authentication_api',__name__)
 
-authentication_api.route("/api/login",method=['POST'])
+@authentication_api.route("/api/login",methods=['POST'])
 def api_login():
     user = db.session.query(db.exists().where(
             User.email == request.form['email'])).scalar()

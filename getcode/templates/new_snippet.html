@@ -56,9 +56,9 @@
                     <textarea required id='textbox' name="code" placeholder="Code" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if code %}{{code}}{%endif%}</textarea>
                 </div>
                 <select class='mb-5' name="visibility">
-                <option name='private'>Private</option>
-                <option name='public'>Public</option>
-            </select>
+                    <option name='private'>Private</option>
+                    <option name='public'>Public</option>
+                </select>
 
                 <br>
                 <button type="submit" class="btn btn-primary" formaction="{{ url_for('snippet_view.preview_new_snippet')}}">Preview snippet</button>
@@ -68,7 +68,8 @@
             {% if email_error %}
             <div class="alert alert-warning alert-dismissible fade show">
                 <strong>Error!</strong>
-                <p>You don't seem to be the owner of this snippet.<a href="{{url_for('authentication_views.login')}}"> Try logging in</a> </p>
+                <p>You don't seem to be the owner of this snippet.<a href="{{url_for('authentication_views.login')}}">
+                        Try logging in</a> </p>
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
             {% else %}
@@ -76,10 +77,11 @@
                 {% if code%}
                 <div>{{ desc|safe }}</div>
                 <div class="mt-5">
-                    <pre><code>{{ code }}</code></pre> </div>
+                    <pre><code>{{ code }}</code></pre>
+                </div>
                 {% endif %}
             </div>
-
+            {% endif %}
     </div>
 </body>
 

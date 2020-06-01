@@ -24,9 +24,7 @@ def home():
     # print(app.config['SQLALCHEMY_DATABASE_URI'])
     # db.create_all()
     nav_params = current_user.is_authenticated
-   
-                
-    
+
     all_snippets =[]
     # TODO better search algorithm find out
     if 'search'  not in request.args:

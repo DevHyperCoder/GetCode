@@ -3,6 +3,9 @@ from flask_jwt_extended import get_jwt_identity,jwt_required
 from getcode.models import User,Snippet
 from getcode.routes import PUBLIC,PRIVATE
 from getcode import db
+
+import traceback
+
 snippet_api=Blueprint('snippet_api',__name__)
 
 @snippet_api.route("/api/snippets/all")

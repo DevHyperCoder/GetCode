@@ -1,5 +1,5 @@
 import os,secrets
-
+import datetime
 # Flask App Config
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -24,3 +24,5 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
 if JWT_SECRET_KEY is None or "":
     JWT_SECRET_KEY = os.urandom(16)
+
+EXPIRY_DELTA = datetime.timedelta(days=365)

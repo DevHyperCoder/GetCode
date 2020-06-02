@@ -5,7 +5,11 @@ from flask_login import current_user
 
 from flask_jwt_extended import create_access_token
 
+import datetime
+
 auth_view= Blueprint('auth_view',__name__)
+
+
 
 # Profile view and settings
 
@@ -15,7 +19,8 @@ def access_token():
         return redirect(url_for('authentication_views.login'))
     
     user = current_user
-    access_token = create_access_token(identity=user.username)
+    
+    access_token = create_access_token(identity=user.username,expires_delta=app.config['EXPIRY_DELTA'])
     return render_template('access_token_view.html',access_token=access_token)
     
 

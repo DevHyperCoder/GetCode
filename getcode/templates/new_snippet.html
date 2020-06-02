@@ -29,8 +29,13 @@
                 <textarea required id='textbox' name="code" placeholder="Code" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if code %}{{code}}{%endif%}</textarea>
             </div>
             <select class='mb-5' name="visibility">
-                    <option name='private'>Private</option>
-                    <option name='public'>Public</option>
+                    <option 
+                    {% if private %} selected {% endif %} 
+                    name='private'>Private</option>
+
+                    <option
+                    {% if public %} selected {% endif %}
+                     name='public'>Public</option>
                 </select>
 
             <br>

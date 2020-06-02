@@ -156,10 +156,24 @@ def preview_new_snippet():
     if not request.method == "POST":
         return render_template("new_snippet.html")
 
+        # public iin seslect
+    print(request.form['visibility'])
+    if request.form['visibility'] == 'Public':
+        return render_template('new_snippet.html',
+                                title= request.form['title'] ,
+                                desc = request.form['desc'],
+                                code=request.form['code'],
+                                public='sdf'
+                                )
+
+
+
     return render_template('new_snippet.html',
                                 title= request.form['title'] ,
                                 desc = request.form['desc'],
-                                code=request.form['code'])
+                                code=request.form['code'],
+                                private='asdf'
+                                )
 
 @snippet_view.route('/delete/<int:id>',methods=['GET','POST'])
 def delete_snippet(id):

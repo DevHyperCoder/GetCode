@@ -21,7 +21,7 @@ def get_all_snippets():
     if not user_exists:
         return {"error":"user doesn't exist"}
 
-    usera=User.query.filter_by(User.username==user)
+    usera=User.query.filter_by(username=user).first()
     email=usera.email
 
     show_snippet_array = []

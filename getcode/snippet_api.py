@@ -15,9 +15,18 @@ def get_all_snippets():
 
     all_snippets=Snippet.query.all()
     print(user)
+
+    # We have the username of the user
+    user_exists = db.session.query(db.exists().where(User.username == user)).scalar()
+    if not user_exists:
+        return {"error":"user doesn't exist"}
+
+    usera=User.query.filter_by(User.username==user)
+    email=usera.email
+
     show_snippet_array = []
     created_by_array = []
-
+    title = []
     for snippet in all_snippets:
         try:
             
@@ -33,6 +42,7 @@ def get_all_snippets():
 
             if email_exists and vis==PRIVATE and email==user.email:
                 show_snippet_array.append(snippet)
+                title.append(snippet.name)
 
 
         except:

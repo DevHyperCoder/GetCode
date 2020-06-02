@@ -3,7 +3,21 @@
 <div class="container">
     <h1>Access Token</h1>
     <p>Copy this safely </p>
-    <code>{{access_token}}</code>
+    <div class="form-control">
+        <textarea id="access_token_element" readonly><code id="access_token_element">{{access_token}}</code></textarea>
+    </div>
+    <!-- <button onclick="copyText" class="btn btn-block btn-dark">Copy to Clipboard</button> -->
 </div>
+
+<!-- <script>
+    function copyText() {
+        var codeBox = document.getElementById('access_token_element')
+        codeBox.select()
+        codeBox.setSelectionRange(0, 99999)
+
+        document.execCommand('copy')
+
+    }
+</script> -->
 
 {%endblock%}

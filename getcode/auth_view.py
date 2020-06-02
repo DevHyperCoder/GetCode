@@ -1,6 +1,6 @@
 from flask import Blueprint,request,render_template,redirect,url_for
 from getcode.models import Snippet
-
+from getcode import app
 from flask_login import current_user 
 
 from flask_jwt_extended import create_access_token

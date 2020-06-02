@@ -14,8 +14,7 @@ def get_all_snippets():
         return{"error":"token invalid"}
 
     all_snippets=Snippet.query.all()
-    email=user.email
-
+    print(user)
     show_snippet_array = []
     created_by_array = []
 

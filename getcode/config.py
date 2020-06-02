@@ -18,3 +18,9 @@ MAIL_PORT=os.environ.get('MAIL_PORT')
 MAIL_USE_TLS=True
 MAIL_USERNAME=os.environ.get('MAIL_USERNAME')
 MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD')
+
+#JWT Extension
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+
+if JWT_SECRET_KEY is None or "":
+    JWT_SECRET_KEY = os.urandom(16)

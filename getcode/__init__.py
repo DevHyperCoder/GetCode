@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
-
+from flask_jwt_extended import JWTManager
 from oauthlib.oauth2 import WebApplicationClient
 
 
@@ -38,6 +38,8 @@ mail = Mail(app)
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 bcrypt = Bcrypt(app)
+
+jwt_manager = JWTManager(app)
 
 from getcode.models import User
 

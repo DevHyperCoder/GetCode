@@ -1,12 +1,24 @@
 from flask import Blueprint,request,render_template,redirect,url_for
-
 from getcode.models import Snippet
 
 from flask_login import current_user 
 
+from flask_jwt_extended import create_access_token
+
 auth_view= Blueprint('auth_view',__name__)
 
 # Profile view and settings
+
+@auth_view.route("/settings/access-token",methods=['POST'])
+def access_token():
+    if not current_user.is_authenticated:
+        return redirect(url_for('authentication_views.login'))
+    
+    user = current_user
+    access_token = create_access_token(identity=user.username)
+    return render_template('access_token_view.html',access_token=access_token)
+    
+
 
 @auth_view.route("/dashboard",methods=['GET','POST'])
 def profile():

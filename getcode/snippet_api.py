@@ -1,12 +1,14 @@
 from flask import Blueprint
+from flask_jwt_extended import get_jwt_identity,jwt_required
 from getcode.models import User,Snippet
 from getcode.routes import PUBLIC,PRIVATE
 from getcode import db
 snippet_api=Blueprint('snippet_api',__name__)
 
-@snippet_api.route("/api/<token>/snippets/all")
-def get_all_snippets(token):
-    user = User.verifiy_reset_token(token)
+@snippet_api.route("/api/snippets/all")
+@jwt_required
+def get_all_snippets():
+    user = get_jwt_identity()
 
     if not user:
         return{"error":"token invalid"}

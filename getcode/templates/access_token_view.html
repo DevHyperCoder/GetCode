@@ -1,18 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %} {%block title %} View Access Token {%endblock%} {%block body%}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Access Token</title>
-</head>
+<div class="container">
+    <h1>Access Token</h1>
+    <p>Copy this safely </p>
+    <code>{{access_token}}</code>
+</div>
 
-<body>
-    <div class="container">
-        <h1>Access Token</h1>
-        <p>Copy this safely </p>
-        <code>{{access_token}}</code>
-    </div>
-</body>
-
-</html>
+{%endblock%}

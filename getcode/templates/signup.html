@@ -1,58 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %} {%block title %} Sign Up for GetCode {%endblock%} {%block body%}
+<div class="container">
+    <div class="login-form">
+        <form action="/signup" method="POST">
+            <h2 class="text-center">Sign Up</h2>
+            <div class="text-center social-btn">
+                <a href="{{url_for('authentication_views.google_login')}}" class="btn btn-danger btn-block"><i class="fa fa-google"></i>
+                        Sign Up with <b>Google</b></a>
+            </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/styles.css">
+            <div class="or-seperator"><i>or</i></div>
+            <div class="form-group">
+                <label for="name">Username</label>
+                <input type="text" class="form-control" placeholder="Enter a username" name='name' id='name' aria-describedby="usernameHelp">
+                <small id="usernameHelp" class='form-text text-muted'>Enter a unique Username</small> {%if username_error %}
+                <div class="alert alert-warning alert-dismissible fade show">
+                    <strong>Warning!</strong> This username has a account associated with it. Please enter a different usename or <a href="{{url_for('authentication_views.login')}}">login</a>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div> {% endif %}
 
-    <title>Signup</title>
-</head>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email"> {% if email_eror %}
 
-<body>
-    <div class="container">
-        <div class="login-form">
-            <form action="/signup" method="POST">
-                <h2 class="text-center">Sign Up</h2>
-                <div class="text-center social-btn">
-                    <a href="{{url_for('authentication_views.google_login')}}" class="btn btn-danger btn-block"><i class="fa fa-google"></i>
-                        Sign in with <b>Google</b></a>
-                </div>
+                <div class="alert alert-warning alert-dismissible fade show">
+                    <strong>Warning!</strong> This email address has a account associated with it. Please enter a different emial address or <a href="{{url_for('authentication_views.login')}}">login</a>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div> {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            </div>
 
-                <div class="or-seperator"><i>or</i></div>
-                <div class="form-group">
-                    <label for="name">Username</label>
-                    <input type="text" class="form-control" placeholder="Enter a username" name='name' id='name' aria-describedby="usernameHelp">
-                    <small id="usernameHelp" class='form-text text-muted'>Enter a unique Username</small> {%if username_error %}
-                    <div class="alert alert-warning alert-dismissible fade show">
-                        <strong>Warning!</strong> This username has a account associated with it. Please enter a different usename or <a href="{{url_for('authentication_views.login')}}">login</a>
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div> {% endif %}
+            <button type="submit" class="btn btn-block btn-primary">SIGNUP</button>
+            <div class="clearfix mt-2 text-center">
+                <a href="{{ url_for('authentication_views.login') }}" class="text-center text-success">Already have a account?</a>
+            </div>
 
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email"> {% if email_eror %}
-
-                    <div class="alert alert-warning alert-dismissible fade show">
-                        <strong>Warning!</strong> This email address has a account associated with it. Please enter a different emial address or <a href="{{url_for('authentication_views.login')}}">login</a>
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div> {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                </div>
-
-                <button type="submit" class="btn btn-block btn-primary">SIGNUP</button>
-                <div class="clearfix mt-2">
-                    <a href="{{ url_for('authentication_views.login') }}" class="text-center text-success">Already have a account?</a>
-                </div>
-
-            </form>
-        </div>
+        </form>
     </div>
-</body>
-
-</html>
+</div>
+{%endblock%}

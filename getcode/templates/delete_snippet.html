@@ -1,34 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <title>Delete Snippet {{name}}</title>
-</head>
-
-<body>
-    {% if email_error %}
+{% extends "layout.html" %} {%block title %} Delete {{name}}? {%endblock%} {%block body%} {% if email_error %}
+<div class="alert alert-warning alert-dismissible fade show">
+    <strong>Error!</strong>
+    <p>You don't seem to be the owner of this snippet.<a href="{{url_for('authentication_views.login')}}"> Try logging in</a> </p>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% else %}
+<form action="{{ url_for('snippet_view.delete_snippet',id=id) }}" method="POST">
+    <h1> Enter this in the textbox</h1>
+    <code>{{name}}</code>
+    <input type="text" name='name'> {% if error %}
     <div class="alert alert-warning alert-dismissible fade show">
         <strong>Error!</strong>
-        <p>You don't seem to be the owner of this snippet.<a href="{{url_for('authentication_views.login')}}"> Try logging in</a> </p>
+        <p>The snippet names don't match!!</p>
         <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
-    {% else %}
-    <form action="{{ url_for('snippet_view.delete_snippet',id=id) }}" method="POST">
-        <h1> Enter this in the textbox</h1>
-        <code>{{name}}</code>
-        <input type="text" name='name'> {% if error %}
-        <div class="alert alert-warning alert-dismissible fade show">
-            <strong>Error!</strong>
-            <p>The snippet names don't match!!</p>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-        {% endif %}
-        <input type="submit">
-    </form>
     {% endif %}
-</body>
-
-</html>
+    <input type="submit">
+</form>
+{% endif %} {%endblock%}

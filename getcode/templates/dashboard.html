@@ -1,69 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %} {%block title %} Dashboard {%endblock%} {%block body%}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/styles.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-</head>
 
-<body>
+<div class="container">
+    <h1 class="display-3 align-items-xl-center">Your Code Snippets</h1>
 
-    <nav class="navbar navbar-expand-sm bg-dark">
-        <ul class="nav navbar">
-            <form action="/dashboard" methods="get" id='form' class="form form-inline ml-auto">
-                <input id='livebox' type="text" name='search' class="form-control mr-sm-2" placeholder="Search">
-                <button type="submit" class="btn btn-outline-success">Search</button>
-            </form>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class='nav-item'>
-                <a class='nav-link' href='{{ url_for("home") }} '>Home</a></li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url_for('auth_view.settings')}}">Settings</a>
-                <!-- change to preferneces  -->
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
-            </li>
+    <div class="row">
+        {% if empty %}
+        <p><small> It seems you don't have any code Snippets</small></p>
+        {% else %} {% for i in range(0,length) %}
+        <div class="col-sm-6 mt-4">
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <h4 class="card-title">{{ name_array[i] }}</h4>
+                    <p class="card-text">{{ description_array[i] }}</p>
+                </div>
+                <div class="card-block">
 
-        </ul>
-    </nav>
-
-    <div class="container">
-        <h1 class="display-3 align-items-xl-center">Your Code Snippets</h1>
-
-        <div class="row">
-            {% if empty %}
-            <p><small> It seems you don't have any code Snippets</small></p>
-            {% else %} {% for i in range(0,length) %}
-            <div class="col-sm-6 mt-4">
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ name_array[i] }}</h4>
-                        <p class="card-text">{{ description_array[i] }}</p>
-                    </div>
-                    <div class="card-block">
-
-                        <form class='form-inline' action="" method="POST">
-                            <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.like_snippet',id=id_array[i],where='dashboard')}}">LIKE</button>
-                            <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=id_array[i])}}">Go to Snippet</button>
-                        </form>
-                    </div>
+                    <form class='form-inline' action="" method="POST">
+                        <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.like_snippet',id=id_array[i],where='dashboard')}}">LIKE</button>
+                        <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=id_array[i])}}">Go to Snippet</button>
+                    </form>
                 </div>
             </div>
-            <!-- </a> -->
-            {% endfor %} {%endif%}
         </div>
+        <!-- </a> -->
+        {% endfor %} {%endif%}
     </div>
+</div>
 
-    <a href="{{ url_for('snippet_view.create_new_snippet')}}">
-        <div class="fab">+</div>
-    </a>
+<a href="{{ url_for('snippet_view.create_new_snippet')}}">
+    <div class="fab">+</div>
+</a>
 
-</body>
-
-</html>
+{%endblock%}

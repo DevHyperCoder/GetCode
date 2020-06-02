@@ -1,60 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <title>LOG IN</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-sm bg-dark">
-
-        <!-- Links -->
-        <ul class="nav navbar">
-            <form action="/" methods="post" class="form-inline ml-auto">
-                <input type="text" class="form-control mr-sm-2" placeholder="Search">
-                <button type="submit" class="btn btn-outline-success">Search</button>
-            </form>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class='nav-item'>
-                <a class='nav-link' href='{{ url_for("home") }} '>Home</a></li>
-        </ul>
-    </nav>
-    <div class="container">
-        <div class="login-form">
-            <form action="/login" method="POST">
-                <h2 class="text-center">Log In</h2>
-                <div class="text-center social-btn">
-                    <a href="{{url_for('authentication_views.google_login')}}" class="btn btn-danger btn-block"><i class="fa fa-google"></i> Sign in with <b>Google</b></a>
-                </div>
-                <div class="or-seperator"><i>or</i></div>
-                <div class="form-group">
-                    <label for="email">Email address</label>
-                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">LOG IN</button>
-                <div class="clearfix mt-2">
-                    <label class="pull-left checkbox-inline"><input name='remember' value="off" type="checkbox"> Remember me</label>
-                    <a href="{{ url_for('authentication_views.reset_request') }}" class="float-right text-success">Forgot Password?</a>
-                </div>
-            </form>
-            <div class="text-muted text-center mt-2 small">Don't have an account? <a href="{{url_for('authentication_views.signup')}}" class="text-success">Register Now!</a></div>
-            <br> {% if error %}
-            <div class="alert alert-error alert-dismissible fade show">
-                <strong>Error!</strong>
-                <p>The username or password seem to be incorrect</p>
+{% extends "layout.html" %} {%block title %} Log In to GetCode {%endblock%} {%block body%}
+<div class="container">
+    <div class="login-form">
+        <form action="/login" method="POST">
+            <h2 class="text-center">Log In</h2>
+            <div class="text-center social-btn">
+                <a href="{{url_for('authentication_views.google_login')}}" class="btn btn-danger btn-block"><i
+                        class="fa fa-google"></i> Sign in with <b>Google</b></a>
             </div>
-            {%endif%}
+            <div class="or-seperator"><i>or</i></div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">LOG IN</button>
+            <div class="clearfix mt-2">
+                <label class="pull-left checkbox-inline"><input name='remember' value="off" type="checkbox"> Remember
+                    me</label>
+                <a href="{{ url_for('authentication_views.reset_request') }}" class="float-right text-success">Forgot
+                    Password?</a>
+            </div>
+        </form>
+        <div class="text-muted text-center mt-2 small">Don't have an account? <a href="{{url_for('authentication_views.signup')}}" class="text-success">Register Now!</a></div>
+        <br> {% if error %}
+        <div class="alert alert-error alert-dismissible fade show">
+            <strong>Error!</strong>
+            <p>The username or password seem to be incorrect</p>
         </div>
+        {%endif%}
     </div>
-</body>
-
-</html>
+</div>
+{%endblock%}

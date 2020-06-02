@@ -5,14 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/getcode/static/styles.css">
-
-
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>{% block title %} {% endblock %}</title>
 </head>
 
 <body>
+    <!-- Nav Bar -->
+    <!-- A grey horizontal navbar that becomes vertical on small screens -->
+    <nav class="navbar navbar-expand-sm bg-dark">
+        <!-- Links -->
+        <ul class="nav navbar">
+            <form action="/" method="GET" class="form-inline ml-auto">
+                <input type="text" id='livebox' name='search' class="form-control mr-sm-2" placeholder="Search">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form>
+        </ul>
+        <h1 class="text-center mx-auto" style="color:white; ">GetCode</h1>
+        <ul class="navbar-nav ml-auto">
+            {% if current_user.is_authenticated is false %}
 
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link " href="/signup">Signup</a>
+            </li>
+
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/dashboard">Dashboard</a>
+            </li>
+            {%endif%}
+
+
+        </ul>
+
+    </nav>
+    <!-- Body -->
+    {%block body%}{%endblock%}
+    <!-- Footer -->
 </body>
 
 </html>

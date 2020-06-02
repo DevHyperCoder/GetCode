@@ -1,56 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+ {% extends "layout.html" %} {%block title %}Settings for {{current_user_name}}{%endblock%} {%block body%}
+<div class="container">
+    <h1 class='display-1 text-center'>Public Profile</h1>
+    <form action='/settings' method="POST">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name='username' value={{current_user.username}} aria-describedby="usernameHelp" placeholder="Change username">
+        </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <title>Settings for {{current_user_name}}</title>
-</head>
+        <div class="from-group">
+            <label for="bio">Bio</label>
+            <textarea type="text" name="bio" id="bio" placeholder="Tell us more about yourself" class="form-control" value={{current_user.bio}} aria-describedby="bioHelp"></textarea>
+        </div>
 
-<body>
-    <nav class="navbar navbar-expand-sm bg-dark">
+        <div class="or-seperator"></div>
 
-        <!-- Links -->
-        <ul class="nav navbar">
-            <!-- <form action="/settings" methods="get" id='form' class="form form-inline ml-auto">
-                <input id='livebox' type="text" name='search' class="form-control mr-sm-2" placeholder="Search">
-                <button type="submit" class="btn btn-outline-success">Search</button>
-            </form> -->
-            <!-- TODO add search to settings -->
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class='nav-item'>
-                <a class='nav-link' href='{{ url_for( "home") }} '>Home</a></li>
-
-            <li class="nav-item">
-                <a class="nav-link" href='{{url_for( "authentication_views.logout")}}'>Logout</a>
-            </li>
-
-        </ul>
-    </nav>
-    <div class="container">
-        <h1 class='display-1 text-center'>Public Profile</h1>
-        <form action='/settings' method="POST">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" name='username' value={{current_user.username}} aria-describedby="usernameHelp" placeholder="Change username">
-            </div>
-
-            <div class="from-group">
-                <label for="bio">Bio</label>
-                <textarea type="text" name="bio" id="bio" placeholder="Tell us more about yourself" class="form-control" value={{current_user.bio}} aria-describedby="bioHelp"></textarea>
-            </div>
-
-            <div class="or-seperator"></div>
-
-            <h1>Access token</h1>
-            <p>Access token ais a asdfaslkdjfklaskljdf</p>
-            <p><b>Warninh!</b> once a acces token is created it cant be read back</p>
-            <button type="submit" class="btn-block btn btn-dark-outline" formaction="{{url_for('auth_view.access_token')}}">Generate Access Token</button>
-            <button class='btn-block btn btn-dark-outline ' type='submit'>Change Settings</button>
-        </form>
-    </div>
-</body>
-
-</html>
+        <h1>Access token</h1>
+        <p>Access token ais a asdfaslkdjfklaskljdf</p>
+        <p><b>Warninh!</b> once a acces token is created it cant be read back</p>
+        <button type="submit" class="btn-block btn btn-dark-outline" formaction="{{url_for('auth_view.access_token')}}">Generate Access Token</button>
+        <button class='btn-block btn btn-dark-outline ' type='submit'>Change Settings</button>
+    </form>
+</div>
+{%endblock%}

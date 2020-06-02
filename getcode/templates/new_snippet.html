@@ -1,88 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %} {%block title %} Create a new Snippet {%endblock%} {%block body%}
+<style>
+    .blue-focus {
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+</style>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a new Snippet</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/styles.css">
-    <style>
-        .blue-focus {
-            border: 1px solid #ced4da;
-            border-radius: .25rem;
-            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-        }
-    </style>
 
-</head>
 
-<body>
 
-    <nav class="navbar navbar-expand-sm bg-dark">
-        <!-- Links -->
-        <ul class="nav navbar">
-            <form action="/" methods="post" class="form-inline ml-auto">
-                <input type="text" class="form-control mr-sm-2" placeholder="Search">
-                <button type="submit" class="btn btn-outline-success">Search</button>
-            </form>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href={{ url_for( "auth_view.profile") }}>Dashboard</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href={{ url_for( "authentication_views.logout") }}>Logout</a>
-            </li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        {% if edit %}
-        <form action="{{ url_for('snippet_view.create_new_snippet',id=id) }}" method="POST">
-            {%else %}
-            <form action="{{ url_for('snippet_view.create_new_snippet') }}" method="POST">
-                {%endif%}
-                <div class="form-group ">
-                    <label for='title'>Title</label>
-                    <input required class='form-control' type="text" name='title' value="{% if title %}{{title}}{% endif %}" placeholder="Title">
-                </div>
-                <div class="form-group ">
-                    <label for="desc">Description</label>
-                    <textarea id="textbox" name="desc" placeholder="Description" class="blue-focus" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if desc %}{{desc}}{%endif%}</textarea>
-                </div>
-                <div class="form-group ">
-                    <label for="code">Enter your code</label>
-                    <textarea required id='textbox' name="code" placeholder="Code" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if code %}{{code}}{%endif%}</textarea>
-                </div>
-                <select class='mb-5' name="visibility">
+<div class="container">
+    {% if edit %}
+    <form action="{{ url_for('snippet_view.create_new_snippet',id=id) }}" method="POST">
+        {%else %}
+        <form action="{{ url_for('snippet_view.create_new_snippet') }}" method="POST">
+            {%endif%}
+            <div class="form-group ">
+                <label for='title'>Title</label>
+                <input required class='form-control' type="text" name='title' value="{% if title %}{{title}}{% endif %}" placeholder="Title">
+            </div>
+            <div class="form-group ">
+                <label for="desc">Description</label>
+                <textarea id="textbox" name="desc" placeholder="Description" class="blue-focus" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if desc %}{{desc}}{%endif%}</textarea>
+            </div>
+            <div class="form-group ">
+                <label for="code">Enter your code</label>
+                <textarea required id='textbox' name="code" placeholder="Code" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if code %}{{code}}{%endif%}</textarea>
+            </div>
+            <select class='mb-5' name="visibility">
                     <option name='private'>Private</option>
                     <option name='public'>Public</option>
                 </select>
 
-                <br>
-                <button type="submit" class="btn btn-primary" formaction="{{ url_for('snippet_view.preview_new_snippet')}}">Preview snippet</button>
-                <button type="submit" class="btn btn-primary">Create Snippet</button>
+            <br>
+            <button type="submit" class="btn btn-primary" formaction="{{ url_for('snippet_view.preview_new_snippet')}}">Preview snippet</button>
+            <button type="submit" class="btn btn-primary">Create Snippet</button>
 
-            </form>
-            {% if email_error %}
-            <div class="alert alert-warning alert-dismissible fade show">
-                <strong>Error!</strong>
-                <p>You don't seem to be the owner of this snippet.<a href="{{url_for('authentication_views.login')}}">
+        </form>
+        {% if email_error %}
+        <div class="alert alert-warning alert-dismissible fade show">
+            <strong>Error!</strong>
+            <p>You don't seem to be the owner of this snippet.<a href="{{url_for('authentication_views.login')}}">
                         Try logging in</a> </p>
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-            </div>
-            {% else %}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+        {% else %}
+        <div class="mt-5">
+            {% if code%}
+            <div>{{ desc|safe }}</div>
             <div class="mt-5">
-                {% if code%}
-                <div>{{ desc|safe }}</div>
-                <div class="mt-5">
-                    <pre><code>{{ code }}</code></pre>
-                </div>
-                {% endif %}
+                <pre><code>{{ code }}</code></pre>
             </div>
             {% endif %}
-    </div>
-</body>
-
-</html>
+        </div>
+        {% endif %}
+</div>
+{%endblock%}

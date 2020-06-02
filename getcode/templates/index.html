@@ -1,85 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <title>GetCode</title>
-</head>
-
-<body>
-    <!-- A grey horizontal navbar that becomes vertical on small screens -->
-    <nav class="navbar navbar-expand-sm bg-dark">
-
-        <!-- Links -->
-        <ul class="nav navbar">
-            <form action="/" method="GET" class="form-inline ml-auto">
-                <input type="text" id='livebox' name='search' class="form-control mr-sm-2" placeholder="Search">
-                <button type="submit" class="btn btn-outline-success">Search</button>
-            </form>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            {% if nav_params is false %}
-
-            <li class="nav-item">
-                <a class="nav-link" href="/login">Login</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link " href="/signup">Signup</a>
-            </li>
-
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/dashboard">Dashboard</a>
-            </li>
-            {%endif%}
-
-
-        </ul>
-
-
-    </nav>
-
-    <div class="container ">
-        <h1 class="display-3 align-items-xl-center
+{% extends "layout.html" %} {%block title %} GetCode {%endblock%} {%block body%}
+<div class="container ">
+    <h1 class="display-3 align-items-xl-center
         ">Latest Code Snippets</h1>
-        <div class="row">
-            {% if empty %}
-            <p><small> It seems you don't have any code Snippets</small></p>
-            {% else %} {% for i in range(0,snippet_array|length) %}
-            <div class="col-sm-6 mt-4">
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ snippet_array[i].name }}</h4>
-                        <p class="card-subtitle text-muted">By: {{ snippet_array[i].created_by_username }}</p>
-                        <p class="card-text">{{ snippet_array[i].description }}</p>
-                    </div>
-                    {% if current_user.is_authenticated %}
-                    <div class="card-block">
-                        <form class='form-inline' action="/" method="POST">
-                            <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.like_snippet',id=snippet_array[i].id,where='home')}}">LIKE</button>
-                            <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].id)}}">Go to Snippet</button>
-                        </form>
-                    </div>
-                    {% else %}
-                    <div class="card-block">
-                        <form class="form-inline" action="" method="POST">
-                            <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].id)}}">Go to Snippet</button>
-                        </form>
-                    </div>
-                    {% endif %}
+    <div class="row">
+        {% if empty %}
+        <p><small> It seems you don't have any code Snippets</small></p>
+        {% else %} {% for i in range(0,snippet_array|length) %}
+        <div class="col-sm-6 mt-4">
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <h4 class="card-title">{{ snippet_array[i].name }}</h4>
+                    <p class="card-subtitle text-muted">By: {{ snippet_array[i].created_by_username }}</p>
+                    <p class="card-text">{{ snippet_array[i].description }}</p>
                 </div>
+                {% if current_user.is_authenticated %}
+                <div class="card-block">
+                    <form class='form-inline' action="/" method="POST">
+                        <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.like_snippet',id=snippet_array[i].id,where='home')}}">LIKE</button>
+                        <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].id)}}">Go to Snippet</button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="card-block">
+                    <form class="form-inline" action="" method="POST">
+                        <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].id)}}">Go to Snippet</button>
+                    </form>
+                </div>
+                {% endif %}
             </div>
-            {% endfor %} {% endif %}
         </div>
+        {% endfor %} {% endif %}
     </div>
-
-</body>
-
-</html>
+</div>
+{%endblock%}

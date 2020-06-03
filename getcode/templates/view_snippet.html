@@ -5,10 +5,15 @@
     <!-- error -->
     {{ error }} {% else %}
     <h1 class="display-3">{{ title }}</h1>
+    {% if current_user.is_authenticated %}
+
+
+
     <form action='{{url_for("snippet_view.delete_snippet",id= id )}}' method="GET" class='form form-check-inline'>
         <button class="btn btn-danger" type="submit">Delete Snippet</button>
         <button class="btn btn-primary" type="submit" formaction="{{url_for('snippet_view.edit_snippet',id=id)}}">Edit</button>
     </form>
+    {% endif %}
     <br>
     <div>{{ desc|safe }}</div>
     <br>
@@ -57,19 +62,12 @@
                     </div>
                     <div class="post-description">
                         <p>{{comment[i]}}</p>
-
                     </div>
                 </div>
             </div>
             {%endfor%} {%endif%}
 
         </div>
-
-
-
-
-
-
     </div>
 </div>
 {%endblock%}

@@ -22,6 +22,7 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email"> {% if email_eror %}
+                <small id="emailHelp" class="form-text text-muted">Enter a email address</small>
 
                 <div class="alert alert-warning alert-dismissible fade show">
                     <strong>Warning!</strong> This email address has a account associated with it. Please enter a different emial address or <a href="{{url_for('authentication_views.login')}}">login</a>
@@ -31,6 +32,7 @@
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
                 <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                <small id="passwordHelp" class="text-muted form-text">Choose a strong password</small>
             </div>
 
             <button type="submit" class="btn btn-block btn-primary">SIGNUP</button>

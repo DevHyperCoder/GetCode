@@ -3,13 +3,14 @@ import requests
 from flask_login import login_user,logout_user,current_user
 
 from getcode import login_manager,bcrypt
-from getcode import db
+from getcode import db,mail
 from getcode.models import User
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_mail import Message
 
+from threading import Thread
 
 authentication_views = Blueprint('authentication_views',__name__)
 
@@ -179,7 +180,7 @@ def send_email(user):
     msg.body=f'''Hi {user.username},
     It seems you have requested a password reset request for {user.email}.
     To reset your password, please click on the link below or copy and paste the link in your browser
-    {url_for('reset_password',token=token,_external=True)}
+    {url_for('authentication_views.reset_password',token=token,_external=True)}
     If you didn't make this password reset request don't worry, nothing has been done to your account.
     '''
     mail.send(msg)
@@ -188,7 +189,7 @@ def send_email(user):
 def reset_request():
     if request.method=='POST':
         if current_user.is_authenticated:
-            return redirect(url_for('profile'))
+            return redirect(url_for('auth_view.profile'))
         email = request.form['email']
         email_exists = db.session.query(db.exists().where(
             User.email == email)).scalar()
@@ -216,7 +217,7 @@ def reset_password(token):
             user.password = password
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for('login'))
+            return redirect(url_for('authentication_views.login'))
         if new_password != new_password_confirm:
             return render_template('password_reset.html',password_error = "Passwords don't match")
 

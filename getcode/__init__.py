@@ -6,8 +6,6 @@ from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 from oauthlib.oauth2 import WebApplicationClient
 
-
-
 import os
 
 PUBLIC = 1

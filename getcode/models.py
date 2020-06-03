@@ -45,6 +45,15 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+    @property
+    def serialize(self):
+        return{
+            "id": self.id,
+            "username": self.username, 
+            "email": self.email, 
+            "bio": self.bio
+        }
+
 
 class Snippet(db.Model):
     __tablename__ = 'code_snippets'
@@ -65,6 +74,19 @@ class Snippet(db.Model):
     created_by_username = db.Column(db.String,
                                     nullable=False,
                                     unique=False)
+
+    @property
+    def serialize(self):
+        return{
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "code": self.code,
+            "created_by_username": self.created_by_username,
+            "created_date": self.created_date,
+            "tags": self.tags,
+            "visibility": self.visibility
+        }
 
 
 class Comments(db.Model):

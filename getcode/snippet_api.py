@@ -1,38 +1,36 @@
-from flask import Blueprint
-from flask_jwt_extended import get_jwt_identity,jwt_required
-from getcode.models import User,Snippet
-from getcode.routes import PUBLIC,PRIVATE
+from flask import Blueprint, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from getcode.models import User, Snippet
+from getcode.routes import PUBLIC, PRIVATE
 from getcode import db
-
 import traceback
+from datetime import date
 
-snippet_api=Blueprint('snippet_api',__name__)
+snippet_api = Blueprint('snippet_api', __name__)
+
 
 @snippet_api.route("/api/snippets/all")
 @jwt_required
 def get_all_snippets():
     user = get_jwt_identity()
 
-    if not user:
-        return{"error":"token invalid"}
-
-    all_snippets=Snippet.query.all()
-    print(user)
+    all_snippets = Snippet.query.all()
 
     # We have the username of the user
-    user_exists = db.session.query(db.exists().where(User.username == user)).scalar()
+    user_exists = db.session.query(
+        db.exists().where(User.username == user)).scalar()
     if not user_exists:
-        return {"error":"user doesn't exist"}
+        return {"error": "user doesn't exist"}
 
-    usera=User.query.filter_by(username=user).first()
-    email=usera.email
+    usera = User.query.filter_by(username=user).first()
+    email = usera.email
 
     show_snippet_array = []
     created_by_array = []
     title = []
     for snippet in all_snippets:
         try:
-            
+
             if snippet.name is None or snippet.name is "":
                 continue
 
@@ -43,30 +41,71 @@ def get_all_snippets():
             if vis == PUBLIC:
                 show_snippet_array.append(snippet)
 
-            if email_exists and vis==PRIVATE and email==user.email:
+            if email_exists and vis == PRIVATE and email == usera.email:
                 show_snippet_array.append(snippet)
                 title.append(snippet.name)
-
 
         except:
             print("EXCEPTION")
             print(traceback.format_exc())
-            return {"error":"can't view all snippets"}
-    return {"snippets":show_snippet_array}
+            return {"error": "can't view all snippets"}
+    title = []
+    for i in show_snippet_array:
+        title.append(i.name)
+        print(i.name)
 
-@snippet_api.route("/api/<token>/snippets/<id>")
-def get_snippet(token,id):
-    user = User.verifiy_reset_token(token)
+    return {"snippets": [i.serialize for i in show_snippet_array]}
 
-    if not user:
-        return{"error":"token invalid"}
+
+@snippet_api.route("/api/snippets/<id>")
+@jwt_required
+def get_snippet(id):
+    username = get_jwt_identity()
 
     snippet = Snippet.query.filter_by(id=id).first()
-    
-    if snippet.visibility==PUBLIC:
-        return {"snippet":snippet}
 
-    elif snippet.visibility==PRIVATE and snippet.email==user.email:
-        return {"snippet":snippet}
+    print(snippet)
+
+    if not snippet:
+        return {"error": "No snippet found"}
+
+    if snippet.visibility == PUBLIC:
+        return {"snippet": snippet.serialize}
+
+    elif snippet.visibility == PRIVATE and snippet.created_by_username == username:
+        return {"snippet": snippet.serialize}
     else:
-        return {"error":"PRIVATE SNIPPET"}
+        return {"error": "PRIVATE SNIPPET"}
+
+
+@snippet_api.route("/api/snippets", methods=['POST'])
+@jwt_required
+def create_snippet():
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return {"error": "No user found"}
+    user_email = user.email
+
+    snippet_title = request.form['title']
+    snippet_desc = request.form['desc']
+    snippet_code = request.form['code']
+    visibility = request.form['visibility']
+    created_date = date.today().strftime("%d/%m/%y")
+
+    snippet_visibility = PRIVATE
+    if visibility is "Public":
+        snippet_visibility = PUBLIC
+
+    snippet = Snippet(title=snippet_title,
+                      description=snippet_desc,
+                      codebility=snippet_visibility,
+                      email=user_email,
+                      created_date=created_date,
+                      crea=snippet_code,
+                      visited_by_username=username)
+
+    db.session.add(snippet)
+    db.session.commit()
+
+    return {"success":snippet_title}

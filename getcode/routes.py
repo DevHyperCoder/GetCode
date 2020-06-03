@@ -54,6 +54,12 @@ def home():
             print("EXCEPTION")
             print(traceback.format_exc())
 
+    title = []
+    for i in show_snippet_array:
+        title.append(i.name)
+        print(i.name)
+    
+
     return render_template("index.html",
                            snippet_array=show_snippet_array,
                            nav_params=nav_params)

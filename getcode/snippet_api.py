@@ -87,6 +87,8 @@ def create_snippet():
         return {"error": "No user found"}
     user_email = user.email
 
+    # TODO check if snippet exisits in the db
+
     snippet_title = request.form['title']
     snippet_desc = request.form['desc']
     snippet_code = request.form['code']
@@ -97,15 +99,76 @@ def create_snippet():
     if visibility is "Public":
         snippet_visibility = PUBLIC
 
-    snippet = Snippet(title=snippet_title,
+    snippet = Snippet(name=snippet_title,
                       description=snippet_desc,
-                      codebility=snippet_visibility,
+                      code=snippet_code,
+                      visibility=snippet_visibility,
                       email=user_email,
                       created_date=created_date,
-                      crea=snippet_code,
-                      visited_by_username=username)
+                      likes=0,
+                      comments='',
+                      created_by_username=username)
 
     db.session.add(snippet)
     db.session.commit()
 
-    return {"success":snippet_title}
+    return {"success": snippet_title}
+
+
+@snippet_api.route("/api/snippets/<int:id>", methods=['DELETE'])
+@jwt_required
+def delete_snippet(id):
+    username = get_jwt_identity()
+
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        return {"error": "No user found"}
+
+    snippet = Snippet.query.filter_by(id=id).first()
+
+    if not snippet:
+        return {"error": "No snippet found"}
+
+    if user.email != snippet.email:
+        print("USER"+user.email)
+        print("USERS"+snippet.email)
+        return {"error": "Users dont match"}
+
+    db.session.delete(snippet)
+    db.session.commit()
+
+    return {"success":"Snippet has been delted for ever"}
+
+
+@snippet_api.route("/api/snippets/<int:id>", methods=['PATCH'])
+@jwt_required
+def edit_snippet(id):
+    username = get_jwt_identity()
+
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        return {"error": "No user found"}
+
+    snippet = Snippet.query.filter_by(id=id).first()
+
+    if not snippet:
+        return {"error": "No snippet found"}
+
+    if user.email != snippet.email:
+        return {"error": "Users dont match"}
+
+    visibility = request.form['visibility']
+    vis = PRIVATE
+    if visibility == 'Public':
+        vis = PUBLIC
+
+    snippet.name = request.form['title']
+    snippet.description = request.form['desc']
+    snippet.code = request.form['code']
+    snippet.visibility = vis
+
+    db.session.commit()
+
+    return {"success":"Snippet updated"}

@@ -52,13 +52,13 @@ def user_loader(user_id):
 from getcode.snippet_view import snippet_view
 from getcode.auth_view import auth_view
 from getcode.authentication_views import authentication_views
-from getcode.authentication_api import authentication_api
+from getcode.api_help import api_help
 from getcode.snippet_api import snippet_api
 
 app.register_blueprint(snippet_view)
 app.register_blueprint(auth_view)
 app.register_blueprint(authentication_views)
-app.register_blueprint(authentication_api)
+app.register_blueprint(api_help)
 app.register_blueprint(snippet_api)
 
 from getcode import routes

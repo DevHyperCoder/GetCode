@@ -1,0 +1,43 @@
+{% extends "layout.html" %} {%block title %} API HELP {%endblock%} {%block body%}
+<div class="container">
+    <p class="">Create your API key by going to <a href="{{url_for('auth_view.settings')}}"> here</a></p>
+    <br/>
+    <p>Pass in the API key as a JWT Authentication bearer token</p>
+    <p>In the request header pass in the key as "Authentication" (Without wquites) and the value as "Bearer &lt;token&gt;" (again without quotes)</p>
+
+    <table class="table">
+        <tr>
+            <th>Endpoint</th>
+            <th>Method</th>
+            <th>params</th>
+        </tr>
+        <tr>
+            <td>
+                <p>/api/snippets</p>
+            </td>
+            <td>GET</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>/api/snippets/&lt;id&gt;</td>
+            <td>GET</td>
+            <td>Pass the id in the URL</td>
+        </tr>
+        <tr>
+            <td>/api/snippets/&lt;id&gt;</td>
+            <td>POST</td>
+            <td>Pass the id in the URL. Pass the "title","desc","code" and the "visibility" (which should be "Public" or "Private") in the request body</td>
+        </tr>
+        <tr>
+            <td>/api/snippets/&lt;id&gt;</td>
+            <td>DELETE</td>
+            <td>Pass the id in the URL</td>
+        </tr>
+        <tr>
+            <td>/api/snippets/&lt;id&gt;</td>
+            <td>PATCH</td>
+            <td>Pass the id in the URL. Pass the "title","desc","code" and the "visibility" (which should be "Public" or "Private") in the request body</td>
+        </tr>
+    </table>
+</div>
+{%endblock%}

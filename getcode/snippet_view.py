@@ -125,7 +125,6 @@ def edit_snippet(id):
                             desc=snipept.description,
                             code=snipept.code,email_error='sadf')
     if request.method=='POST':
-        i
         visibility = request.form['visibility']
         vis = PRIVATE
         if visibility == 'Public':

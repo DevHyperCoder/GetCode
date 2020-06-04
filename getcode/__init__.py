@@ -54,11 +54,14 @@ from getcode.auth_view import auth_view
 from getcode.authentication_views import authentication_views
 from getcode.api_help import api_help
 from getcode.snippet_api import snippet_api
+from getcode.google_auth import google_auth
 
 app.register_blueprint(snippet_view)
 app.register_blueprint(auth_view)
 app.register_blueprint(authentication_views)
 app.register_blueprint(api_help)
 app.register_blueprint(snippet_api)
+app.register_blueprint(google_auth)
+
 
 from getcode import routes

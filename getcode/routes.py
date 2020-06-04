@@ -50,6 +50,7 @@ def home():
             vis = snippet.visibility
             if vis == PUBLIC:
                 show_snippet_array.append(snippet)
+                print(snippet.snippet_id)
         except:
             print("EXCEPTION")
             print(traceback.format_exc())

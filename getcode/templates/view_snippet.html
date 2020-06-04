@@ -4,20 +4,18 @@
     {% if error %}
     <!-- error -->
     {{ error }} {% else %}
-    <h1 class="display-3">{{ title }}</h1>
+    <h1 class="display-3">{{ snippet.name }}</h1>
     {% if current_user.is_authenticated %}
-
-
-
-    <form action='{{url_for("snippet_view.delete_snippet",id= id )}}' method="GET" class='form form-check-inline'>
+    <!-- TODO Make it so that only the email mathc snippeet email show -->
+    <form action='{{url_for("snippet_view.delete_snippet",id= snippet.snippet_id )}}' method="GET" class='form form-check-inline'>
         <button class="btn btn-danger" type="submit">Delete Snippet</button>
-        <button class="btn btn-primary" type="submit" formaction="{{url_for('snippet_view.edit_snippet',id=id)}}">Edit</button>
+        <button class="btn btn-primary" type="submit" formaction="{{url_for('snippet_view.edit_snippet',id=snippet.snippet_id)}}">Edit</button>
     </form>
     {% endif %}
     <br>
-    <div>{{ desc|safe }}</div>
+    <div>{{ snippet.description|safe }}</div>
     <br>
-    <pre><code>{{code}}</code></pre> {% endif %}
+    <pre><code>{{snippet.code}}</code></pre> {% endif %}
     <div class="container">
         <h2>Comments</h2>
         <div class="row">
@@ -30,12 +28,14 @@
                         </div>
                         <div class="float-left meta">
                             <div class="title h5">
+                                <!-- TODO Link to User profile page once its done -->
                                 <a href="#"><b>{{current_user.name}}</b></a>
                             </div>
 
                         </div>
                     </div>
                     <div class="post-description">
+
                         <form action="" method="POST">
                             <textarea required id='textbox' name="comment_body" id="comment_body" placeholder='Comment Here!' oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                             <button class="btn btn-block btn-primary" type="submit">Add Comment</button>
@@ -55,6 +55,7 @@
                         </div>
                         <div class="float-left meta">
                             <div class="title h5">
+                                <!-- TODO link to user profule-->
                                 <a href="#"><b>{{users[i]}}</b></a>
                             </div>
                             <h6 class="text-muted time">{{created_date[i]}}</h6>

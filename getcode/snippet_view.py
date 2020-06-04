@@ -11,15 +11,16 @@ from getcode import db
 snippet_view = Blueprint('snippet_view', __name__)
 
 
-@snippet_view.route("/view/<int:id>", methods=['GET', 'POST'])
+@snippet_view.route("/view/<string:id>", methods=['GET', 'POST'])
 def view(id):
-    snippet = Snippet.query.filter_by(id=id).first()
-
+    snippet = Snippet.query.filter_by(snippet_id=id).first()
+    if snippet is None:
+        return "No snippet is avail with "+id
     # TODO Maybe refactor this to make it more readable
     if snippet.visibility == PUBLIC:
         if request.method == 'POST':
-            if current_user.is_authenticated == False:
-                return render_template("view_snippet.html", id=snippet.id, title=snippet.name, desc=snippet.description, code=snippet.code, comment_error="lease log in inodred to psot a cometn")
+            if not current_user.is_authenticated:
+                return render_template("view_snippet.html", snippet=snippet)
 
             if 'comment_body' in request.form:
                 comment = Comments.query.filter_by(
@@ -35,10 +36,7 @@ def view(id):
         comments = Comments.query.filter_by(post_name=snippet.name).all()
         if comments is None and current_user.is_authenticated:
             return render_template("view_snippet.html",
-                                   id=snippet.id,
-                                   title=snippet.name,
-                                   desc=snippet.description,
-                                   code=snippet.code)
+                                   snippet=snippet)
         # Comments view
         usernames = []
         dates = []
@@ -54,10 +52,7 @@ def view(id):
             img.append('')
 
         return render_template("view_snippet.html",
-                               title=snippet.name,
-                               id=snippet.id,
-                               desc=snippet.description,
-                               code=snippet.code,
+                               snippet=snippet,
                                length=len(dates),
                                users=usernames,
                                comment=text,
@@ -69,12 +64,12 @@ def view(id):
         person = User.query.filter_by(email=snippet.email).first().username
         if request.method == 'POST':
             if current_user.is_authenticated == False:
-                return render_template("view_snippet.html", id=snippet.id, title=snippet.name, desc=snippet.description, code=snippet.code, comment_error="lease log in inodred to psot a cometn")
+                return render_template("view_snippet.html", snippet=snippet)
             if 'comment_body' in request.form:
                 comment = Comments.query.filter_by(
                     comment=request.form['comment_body']).first()
                 if comment is not None:
-                    return render_template("view_snippet.html", id=snippet.id, title=snippet.name, desc=snippet.description, code=snippet.code, comment_error="can;'post same commetn")
+                    return render_template("view_snippet.html", snippet=snippet)
                 comment = Comments(email_of_commenter=current_user.email,
                                    created_date=date.today().strftime('%d/%m/%y'),
                                    comment=request.form['comment_body'], post_name=snippet.name)
@@ -85,10 +80,7 @@ def view(id):
             if comments == None:
                 if current_user.is_authenticated:
                     return render_template("view_snippet.html",
-                                           id=snippet.id,
-                                           title=snippet.name,
-                                           desc=snippet.description,
-                                           code=snippet.code)
+                                           snippet=snippet)
             # Comments view
             usernames = []
             dates = []
@@ -103,10 +95,7 @@ def view(id):
                 img.append('')
 
             return render_template("view_snippet.html",
-                                   title=snippet.name,
-                                   id=snippet.id,
-                                   desc=snippet.description,
-                                   code=snippet.code,
+                                   snippet=snippet,
                                    length=len(dates),
                                    users=usernames,
                                    comment=text, img=img,
@@ -180,12 +169,16 @@ def preview_new_snippet():
                            private='asdf')
 
 
-@snippet_view.route('/delete/<int:id>', methods=['GET', 'POST'])
+@snippet_view.route('/delete/<string:id>', methods=['GET', 'POST'])
 def delete_snippet(id):
     if not current_user.is_authenticated:
         return redirect(url_for('authentication_views.login'))
 
-    snippet = Snippet.query.filter_by(id=id).first()
+    snippet = Snippet.query.filter_by(snippet_id=id).first()
+
+    if not snippet:
+        # TODO Return a nice eroror message
+        return "No snippet avail"
 
     if snippet.email != current_user.email:
         # Return a nice error message
@@ -193,10 +186,13 @@ def delete_snippet(id):
 
     if request.method == 'POST':
         if request.form['name'] != snippet.name:
-            return render_template('delete_snippet.html', id=snippet.id, name=snippet.name, error="E-NAME")
+            return render_template('delete_snippet.html', id=snippet.snippet_id, name=snippet.name, error="E-NAME")
         db.session.delete(snippet)
         db.session.commit()
-    return render_template('delete_snippet.html', id=snippet.id, name=snippet.name)
+
+        return redirect('auth_view.profile')
+
+    return render_template('delete_snippet.html', id=snippet.snippet_id, name=snippet.name)
 
 
 @snippet_view.route('/like', methods=['post'])
@@ -267,7 +263,7 @@ def create_new_snippet():
             vis = PUBLIC
 
         snippet_id = get_rand_base64()
-        
+
         snippet = Snippet(name=title,
                           description=desc,
                           email=email,

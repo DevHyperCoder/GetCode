@@ -4,7 +4,7 @@
         ">Latest Code Snippets</h1>
     <div class="row">
         {% if empty %}
-        <p><small> It seems you don't have any code Snippets</small></p>
+        <p><small> It seems we are having some issues!</small></p>
         {% else %} {% for i in range(0,snippet_array|length) %}
         <div class="col-sm-6 mt-4">
             <div class="card" style="width: 20rem;">
@@ -13,20 +13,14 @@
                     <p class="card-subtitle text-muted">By: {{ snippet_array[i].created_by_username }}</p>
                     <p class="card-text">{{ snippet_array[i].description }}</p>
                 </div>
-                {% if current_user.is_authenticated %}
                 <div class="card-block">
                     <form class='form-inline' action="/" method="POST">
-                        <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.like_snippet',id=snippet_array[i].id,where='home')}}">LIKE</button>
-                        <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].id)}}">Go to Snippet</button>
+                        {% if current_user.is_authenticated %}
+                        <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.like_snippet',id=snippet_array[i].snippet_id,where='home')}}">LIKE</button> {% endif %}
+                        <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].snippet_id)}}">Go to
+                            Snippet</button>
                     </form>
                 </div>
-                {% else %}
-                <div class="card-block">
-                    <form class="form-inline" action="" method="POST">
-                        <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].id)}}">Go to Snippet</button>
-                    </form>
-                </div>
-                {% endif %}
             </div>
         </div>
         {% endfor %} {% endif %}

@@ -46,19 +46,13 @@ def profile():
         if len(all_snippets) is None or len(all_snippets) is 0:
             return render_template("dashboard.html", empty=True, length=0, snippets=[0])
 
-        title_array = []
-        description_array = []
-        id_array = []
+        show_snippet_array=[]
 
         for snippet in all_snippets:
-            title_array.append(snippet.name)
-            description_array.append(snippet.description)
-            id_array.append(snippet.id)
+            show_snippet_array.append(snippet)
+
         return render_template("dashboard.html", 
-                                length=len(title_array),
-                                id_array=id_array,
-                                name_array=title_array, 
-                                description_array=description_array)
+                                snippet_array=show_snippet_array)
 
     else:
         return redirect(url_for('authentication_views.login'))

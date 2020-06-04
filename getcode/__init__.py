@@ -39,10 +39,10 @@ bcrypt = Bcrypt(app)
 
 jwt_manager = JWTManager(app)
 
-from getcode.models import User
-
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+from getcode.models import User
 
 @login_manager.user_loader
 def user_loader(user_id):
@@ -62,6 +62,5 @@ app.register_blueprint(authentication_views)
 app.register_blueprint(api_help)
 app.register_blueprint(snippet_api)
 app.register_blueprint(google_auth)
-
 
 from getcode import routes

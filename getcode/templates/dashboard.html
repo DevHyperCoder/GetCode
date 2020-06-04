@@ -7,18 +7,17 @@
     <div class="row">
         {% if empty %}
         <p><small> It seems you don't have any code Snippets</small></p>
-        {% else %} {% for i in range(0,length) %}
+        {% else %} {% for i in range(0,snippet_array|length) %}
         <div class="col-sm-6 mt-4">
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
-                    <h4 class="card-title">{{ name_array[i] }}</h4>
-                    <p class="card-text">{{ description_array[i] }}</p>
+                    <h4 class="card-title">{{ snippet_array[i].name }}</h4>
+                    <p class="card-text">{{ snippet_array[i].description }}</p>
                 </div>
                 <div class="card-block">
-
                     <form class='form-inline' action="" method="POST">
-                        <button class='btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.like_snippet',id=id_array[i],where='dashboard')}}">LIKE</button>
-                        <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=id_array[i])}}">Go to Snippet</button>
+                        <button class='ml-auto float-right btn btn-outline-dark' type="submit" formaction="{{ url_for('snippet_view.view',id=snippet_array[i].snippet_id)}}">Go to
+                            Snippet</button>
                     </form>
                 </div>
             </div>

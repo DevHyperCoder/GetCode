@@ -5,6 +5,8 @@ from getcode.routes import PUBLIC, PRIVATE
 from getcode import db
 import traceback
 from datetime import date
+from getcode.rand_id import get_rand_base64
+from getcode.utils import does_snippet_exist
 
 snippet_api = Blueprint('snippet_api', __name__)
 
@@ -83,13 +85,18 @@ def get_snippet(id):
 def create_snippet():
     username = get_jwt_identity()
     user = User.query.filter_by(username=username).first()
+
     if not user:
         return {"error": "No user found"}
+
     user_email = user.email
 
-    # TODO check if snippet exisits in the db
-
     snippet_title = request.form['title']
+
+    # Check if the title exists before!
+    if does_snippet_exist(title):
+        return render_template('new_snippet.html', error="Title exists")
+
     snippet_desc = request.form['desc']
     snippet_code = request.form['code']
     visibility = request.form['visibility']
@@ -99,6 +106,9 @@ def create_snippet():
     if visibility is "Public":
         snippet_visibility = PUBLIC
 
+    # Generate Random ID
+    snippet_id = get_rand_base64()
+
     snippet = Snippet(name=snippet_title,
                       description=snippet_desc,
                       code=snippet_code,
@@ -107,7 +117,8 @@ def create_snippet():
                       created_date=created_date,
                       likes=0,
                       comments='',
-                      created_by_username=username)
+                      created_by_username=username, 
+                      snippet_id=snippet_id)
 
     db.session.add(snippet)
     db.session.commit()
@@ -138,7 +149,7 @@ def delete_snippet(id):
     db.session.delete(snippet)
     db.session.commit()
 
-    return {"success":"Snippet has been delted for ever"}
+    return {"success": "Snippet has been delted for ever"}
 
 
 @snippet_api.route("/api/snippets/<int:id>", methods=['PATCH'])
@@ -171,4 +182,4 @@ def edit_snippet(id):
 
     db.session.commit()
 
-    return {"success":"Snippet updated"}
+    return {"success": "Snippet updated"}

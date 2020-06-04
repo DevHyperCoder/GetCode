@@ -75,6 +75,8 @@ class Snippet(db.Model):
                                     nullable=False,
                                     unique=False)
 
+    snippet_id=db.Column(db.String,primary_key=False,unique=True)
+
     @property
     def serialize(self):
         return{

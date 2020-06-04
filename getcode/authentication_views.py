@@ -5,7 +5,7 @@ from flask_login import login_user,logout_user,current_user
 from getcode import login_manager,bcrypt
 from getcode import db,mail
 from getcode.models import User
-
+from getcode.utils import does_user_exist
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_mail import Message
@@ -132,16 +132,8 @@ def logout():
     logout_user()
     return redirect(url_for("home"))
 
-def does_user_exist(email=None, username=None):
-    if email is not None:
-        # Email is given
-        return db.session.query(db.exists().where(
-            User.email == email)).scalar()
-    
-    if username is not None:
-        # Username is given
-        return db.session.query(db.exists().where(
-            User.username==username)).scalar()
+
+
 
 @authentication_views.route("/signup", methods=['GET', 'POST'])
 def signup():

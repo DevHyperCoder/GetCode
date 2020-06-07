@@ -1,6 +1,6 @@
 from flask import Blueprint,request,render_template,redirect,url_for
 from getcode.models import Snippet
-from getcode import app
+from getcode import app,db
 from flask_login import current_user 
 
 from flask_jwt_extended import create_access_token
@@ -57,8 +57,19 @@ def profile():
     else:
         return redirect(url_for('authentication_views.login'))
 
-@auth_view.route('/settings')
+@auth_view.route('/settings',methods=['GET','POST'])
 def settings():
     if not current_user.is_authenticated:
         return redirect(url_for('authentication_views.login'))
+
+    if request.method=="POST":
+        username=request.form['username']
+        bio=request.form['bio']
+
+        current_user.username=username
+        current_user.bio=bio
+
+        db.session.add(current_user)
+        db.session.commit()
+
     return render_template('settings.html')

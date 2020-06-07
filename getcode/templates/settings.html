@@ -1,4 +1,4 @@
- {% extends "layout.html" %} {%block title %}Settings for {{current_user_name}}{%endblock%} {%block body%}
+ {% extends "layout.html" %} {%block title %}Settings for {{current_user.username}}{%endblock%} {%block body%}
 <div class="container">
     <h1 class='display-1 text-center'>Public Profile</h1>
     <form action='/settings' method="POST">
@@ -15,6 +15,7 @@
         <div class="or-seperator"></div>
 
         <h1>Access token</h1>
+        <!-- TODO fix this make it good -->
         <p>Access token ais a asdfaslkdjfklaskljdf</p>
         <p><b>Warninh!</b> once a acces token is created it cant be read back</p>
         <button type="submit" class="btn-block btn btn-dark-outline" formaction="{{url_for('auth_view.access_token')}}">Generate Access Token</button>

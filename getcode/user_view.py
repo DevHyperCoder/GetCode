@@ -19,7 +19,7 @@ def user_profile(id):
     for snippet in snippets_by_user:
         if snippet.visibility is PUBLIC:
             show_snippet_array.append(snippet)
-        elif snippet.email == current_user.email:
+        elif current_user.is_authenticated and snippet.email == current_user.email:
             show_snippet_array.append(snippet)
 
     return render_template('user-profile.html', user=user, snippet_array=show_snippet_array)
@@ -48,7 +48,7 @@ def get_user_profile():
     for snippet in snippets_by_user:
         if snippet.visibility is PUBLIC:
             show_snippet_array.append(snippet)
-        elif snippet.email == current_user.email:
+        elif current_user.is_authenticated and snippet.email == current_user.email:
             show_snippet_array.append(snippet)
 
     return render_template('user-profile.html', user=user,snippet_array=show_snippet_array)

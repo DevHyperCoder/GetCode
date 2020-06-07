@@ -61,4 +61,4 @@ def profile():
 def settings():
     if not current_user.is_authenticated:
         return redirect(url_for('authentication_views.login'))
-    return render_template('settings.html',current_user_name=current_user.username)
+    return render_template('settings.html')

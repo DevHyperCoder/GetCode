@@ -2,7 +2,7 @@ from flask import Blueprint, request, render_template, url_for, redirect
 from datetime import date
 from getcode.models import Snippet, User, Comments
 from getcode import PUBLIC, PRIVATE
-from getcode.utils import does_snippet_exist
+from getcode.utils import does_snippet_exist,is_current_user_authenticated
 from getcode.rand_id import get_rand_base64
 from flask_login import current_user
 
@@ -14,12 +14,14 @@ snippet_view = Blueprint('snippet_view', __name__)
 @snippet_view.route("/view/<string:id>", methods=['GET', 'POST'])
 def view(id):
     snippet = Snippet.query.filter_by(snippet_id=id).first()
+
     if snippet is None:
         return "No snippet is avail with "+id
+
     # TODO Maybe refactor this to make it more readable
     if snippet.visibility == PUBLIC:
         if request.method == 'POST':
-            if not current_user.is_authenticated:
+            if not is_current_user_authenticated():
                 return render_template("view_snippet.html", snippet=snippet)
 
             if 'comment_body' in request.form:
@@ -34,7 +36,7 @@ def view(id):
                 db.session.commit()
 
         comments = Comments.query.filter_by(post_name=snippet.name).all()
-        if comments is None and current_user.is_authenticated:
+        if comments is None and is_current_user_authenticated():
             return render_template("view_snippet.html",
                                    snippet=snippet)
         # Comments view
@@ -63,7 +65,7 @@ def view(id):
         # private. check if the email is the curr user
         person = User.query.filter_by(email=snippet.email).first().username
         if request.method == 'POST':
-            if current_user.is_authenticated == False:
+            if not is_current_user_authenticated() :
                 return render_template("view_snippet.html", snippet=snippet)
             if 'comment_body' in request.form:
                 comment = Comments.query.filter_by(
@@ -75,10 +77,10 @@ def view(id):
                                    comment=request.form['comment_body'], post_name=snippet.name)
                 db.session.add(comment)
                 db.session.commit()
-        if current_user.is_authenticated and current_user.email == snippet.email:
+        if is_current_user_authenticated() and current_user.email == snippet.email:
             comments = Comments.query.filter_by(post_name=snippet.name).all()
             if comments == None:
-                if current_user.is_authenticated:
+                if is_current_user_authenticated():
                     return render_template("view_snippet.html",
                                            snippet=snippet)
             # Comments view
@@ -105,7 +107,7 @@ def view(id):
 
 @snippet_view.route('/edit/<string:id>', methods=['GET', 'POST'])
 def edit_snippet(id):
-    if not current_user.is_authenticated:
+    if not is_current_user_authenticated():
         return redirect(url_for('authentication_views.login'))
 
     snipept = Snippet.query.filter_by(snippet_id=id).first()
@@ -147,7 +149,7 @@ def edit_snippet(id):
 
 @snippet_view.route("/new/", methods=['get', 'post'])
 def preview_new_snippet():
-    if not current_user.is_authenticated:
+    if not is_current_user_authenticated():
         return redirect(url_for('authentication_views.login'))
 
     if not request.method == "POST":
@@ -171,7 +173,7 @@ def preview_new_snippet():
 
 @snippet_view.route('/delete/<string:id>', methods=['GET', 'POST'])
 def delete_snippet(id):
-    if not current_user.is_authenticated:
+    if not is_current_user_authenticated():
         return redirect(url_for('authentication_views.login'))
 
     snippet = Snippet.query.filter_by(snippet_id=id).first()
@@ -198,7 +200,7 @@ def delete_snippet(id):
 @snippet_view.route('/like', methods=['post'])
 def like_snippet():
 
-    if not current_user.is_authenticated:
+    if not is_current_user_authenticated():
         where = request.args.get('where', 'home')
         if where is "home":
             return redirect(url_for('home'))
@@ -243,7 +245,7 @@ def like_snippet():
 @snippet_view.route("/new/create", methods=['GET', 'POST'])
 def create_new_snippet():
 
-    if not current_user.is_authenticated:
+    if not is_current_user_authenticated():
         return redirect(url_for('authentication_views.login'))
 
     if request.method == 'POST':
@@ -256,6 +258,7 @@ def create_new_snippet():
         desc = request.form['desc']
         code = request.form['code']
         email = current_user.email
+        created_by_username=current_user.username
         created_date = date.today().strftime('%d/%m/%y')
         visibility = request.form['visibility']
         vis = PRIVATE
@@ -270,6 +273,7 @@ def create_new_snippet():
                           code=code,
                           snippet_id=snippet_id,
                           created_date=created_date,
+                          created_by_username=created_by_username,
                           likes=0,
                           comments='',
                           visibility=vis)

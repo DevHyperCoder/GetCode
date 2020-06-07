@@ -34,7 +34,6 @@ def home():
         all_snippets_temp=Snippet.query.all()
         for snippet in all_snippets_temp:
             if search_query in snippet.name:
-                print(snippet.name)
                 all_snippets.append(snippet)
 
     show_snippet_array = []

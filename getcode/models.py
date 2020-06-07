@@ -28,6 +28,8 @@ class User(db.Model, UserMixin):
     bio = db.Column(db.String(), primary_key=False,
                     unique=False, nullable=False)
 
+    user_id=db.Column(db.String,primary_key=False,unique=True)
+
     def get_reset_token(self, expires_sec=1800):
         # defualt is 30min
         s = Serializer(app.config['SECRET_KEY'], expires_sec)

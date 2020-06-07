@@ -5,7 +5,7 @@
     <!-- error -->
     {{ error }} {% else %}
     <h1 class="display-3">{{ snippet.name }}</h1>
-    {% if current_user.is_authenticated %}
+    {% if current_user.is_authenticated and current_user.email==snippet.email%}
     <!-- TODO Make it so that only the email mathc snippeet email show -->
     <form action='{{url_for("snippet_view.delete_snippet",id= snippet.snippet_id )}}' method="GET" class='form form-check-inline'>
         <button class="btn btn-danger" type="submit">Delete Snippet</button>

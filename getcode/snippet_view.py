@@ -177,13 +177,12 @@ def delete_snippet(id):
         return redirect(url_for('authentication_views.login'))
 
     snippet = Snippet.query.filter_by(snippet_id=id).first()
-
     if not snippet:
         # TODO Return a nice eroror message
         return "No snippet avail"
 
     if snippet.email != current_user.email:
-        # Return a nice error message
+        # TODO Return a nice error message
         return render_template('delete_snippet.html', email_error='user')
 
     if request.method == 'POST':
@@ -192,7 +191,7 @@ def delete_snippet(id):
         db.session.delete(snippet)
         db.session.commit()
 
-        return redirect('auth_view.profile')
+        return redirect(url_for('auth_view.profile'))
 
     return render_template('delete_snippet.html', id=snippet.snippet_id, name=snippet.name)
 

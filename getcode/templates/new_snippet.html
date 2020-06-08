@@ -22,11 +22,11 @@
             </div>
             <div class="form-group ">
                 <label for="desc">Description</label>
-                <textarea id="textbox" name="desc" placeholder="Description" class="blue-focus" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if desc %}{{desc}}{%endif%}</textarea>
+                <textarea class="form-control" id="textbox" name="desc" placeholder="Description" class="blue-focus" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if desc %}{{desc}}{%endif%}</textarea>
             </div>
             <div class="form-group ">
                 <label for="code">Enter your code</label>
-                <textarea required id='textbox' name="code" placeholder="Code" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if code %}{{code}}{%endif%}</textarea>
+                <textarea class="form-control" required id='textbox' name="code" placeholder="Code" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{% if code %}{{code}}{%endif%}</textarea>
             </div>
             <select class='mb-5' name="visibility">
                     <option 
@@ -50,15 +50,15 @@
                         Try logging in</a> </p>
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
-        {% else %}
+        {% endif %} {% if code%}
         <div class="mt-5">
-            {% if code%}
+
             <div>{{ desc|safe }}</div>
             <div class="mt-5">
                 <pre><code>{{ code }}</code></pre>
             </div>
-            {% endif %}
         </div>
         {% endif %}
+
 </div>
 {%endblock%}

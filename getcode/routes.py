@@ -68,13 +68,13 @@ def home():
 @maintance
 def about_us():
     # TODO add a about us page
-    return "About Us"
+    return render_template("about-us.html")
 
 @app.route("/contact-us")
 @maintance
 def contact_us():
     # TODO add a contact us page
-    return "Contact Us"
+    return render_template("contact-us.html")
 
 
 def has_no_empty_params(rule):

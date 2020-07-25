@@ -21,8 +21,6 @@ def maintance(f):
 @app.route("/",methods=['GET','POST'])
 @maintance
 def home():
-    # print(app.config['SQLALCHEMY_DATABASE_URI'])
-    # db.create_all()
     nav_params = current_user.is_authenticated
 
     all_snippets =[]
@@ -67,13 +65,11 @@ def home():
 @app.route("/about-us")
 @maintance
 def about_us():
-    # TODO add a about us page
     return render_template("about-us.html")
 
 @app.route("/contact-us")
 @maintance
 def contact_us():
-    # TODO add a contact us page
     return render_template("contact-us.html")
 
 

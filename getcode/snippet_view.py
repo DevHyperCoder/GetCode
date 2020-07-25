@@ -178,11 +178,9 @@ def delete_snippet(id):
 
     snippet = Snippet.query.filter_by(snippet_id=id).first()
     if not snippet:
-        # TODO Return a nice eroror message
-        return "No snippet avail"
+        return render_template('delete_snippet.html',snippet_error='snippet')
 
     if snippet.email != current_user.email:
-        # TODO Return a nice error message
         return render_template('delete_snippet.html', email_error='user')
 
     if request.method == 'POST':

@@ -6,7 +6,6 @@
     {{ error }} {% else %}
     <h1 class="display-3">{{ snippet.name }}</h1>
     {% if current_user.is_authenticated and current_user.email==snippet.email%}
-    <!-- TODO Make it so that only the email mathc snippeet email show -->
     <form action='{{url_for("snippet_view.delete_snippet",id= snippet.snippet_id )}}' method="GET" class='form form-check-inline'>
         <button class="btn btn-danger" type="submit">Delete Snippet</button>
         <button class="btn btn-primary" type="submit" formaction="{{url_for('snippet_view.edit_snippet',id=snippet.snippet_id)}}">Edit</button>
@@ -28,8 +27,7 @@
                         </div>
                         <div class="float-left meta">
                             <div class="title h5">
-                                <!-- TODO Link to User profile page once its done -->
-                                <a href="#"><b>{{current_user.name}}</b></a>
+                                <a href="{{url_for('user_view.get_user_profile',email=snippet.email)}}"><b>{{current_user.name}}</b></a>
                             </div>
 
                         </div>
@@ -55,8 +53,7 @@
                         </div>
                         <div class="float-left meta">
                             <div class="title h5">
-                                <!-- TODO link to user profule-->
-                                <a href="#"><b>{{users[i]}}</b></a>
+                                <a href="{{url_for('user_view.get_user_profile',username=username)}}"><b>{{users[i]}}</b></a>
                             </div>
                             <h6 class="text-muted time">{{created_date[i]}}</h6>
                         </div>

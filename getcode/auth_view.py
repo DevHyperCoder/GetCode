@@ -9,8 +9,6 @@ import datetime
 
 auth_view= Blueprint('auth_view',__name__)
 
-
-
 # Profile view and settings
 
 @auth_view.route("/settings/access-token",methods=['POST'])

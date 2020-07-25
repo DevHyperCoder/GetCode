@@ -1,5 +1,21 @@
 {% extends "layout.html" %} {%block title %} Dashboard {%endblock%} {%block body%}
-
+<script defer>
+    console.log("in the script")
+    descList = document.getElementsByClassName("text-clip")
+    console.log(descList)
+    for (var i = 0, len = descList.length; i < len; i++) {
+        oldText = descList[i].textContent;
+        console.log(oldText)
+        if (oldText.length > 30) {
+            console.log(">30")
+            newText = oldText.substring(0, 30);
+            newText += ".......";
+            console.log(newText)
+            descList[i].textContent = newText;
+            console.log(descList[i].textContent)
+        }
+    }
+</script>
 
 <div class="container">
     <h1 class="display-3 align-items-xl-center">Your Code Snippets</h1>
@@ -12,7 +28,8 @@
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
                     <h4 class="card-title">{{ snippet_array[i].name }}</h4>
-                    <p class="card-text">{{ snippet_array[i].description }}</p>
+                    <p class="card-text text-clip" style="overflow: hidden;  text-overflow: ellipsis;">{{snippet_array[i].description}}</p>
+
                 </div>
                 <div class="card-block">
                     <form class='form-inline' action="" method="POST">

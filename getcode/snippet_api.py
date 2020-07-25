@@ -10,22 +10,12 @@ from getcode.utils import does_snippet_exist
 
 snippet_api = Blueprint('snippet_api', __name__)
 
+# Return all snippets which are public
+
 
 @snippet_api.route("/api/snippets/all")
-@jwt_required
 def get_all_snippets():
-    user = get_jwt_identity()
-
     all_snippets = Snippet.query.all()
-
-    # We have the username of the user
-    user_exists = db.session.query(
-        db.exists().where(User.username == user)).scalar()
-    if not user_exists:
-        return {"error": "user doesn't exist"}
-
-    usera = User.query.filter_by(username=user).first()
-    email = usera.email
 
     show_snippet_array = []
     created_by_array = []
@@ -36,25 +26,14 @@ def get_all_snippets():
             if snippet.name is None or snippet.name is "":
                 continue
 
-            email = snippet.email
-            email_exists = db.session.query(db.exists().where(
-                User.email == email)).scalar()
             vis = snippet.visibility
             if vis == PUBLIC:
                 show_snippet_array.append(snippet)
-
-            if email_exists and vis == PRIVATE and email == usera.email:
-                show_snippet_array.append(snippet)
-                title.append(snippet.name)
 
         except:
             print("EXCEPTION")
             print(traceback.format_exc())
             return {"error": "can't view all snippets"}
-    title = []
-    for i in show_snippet_array:
-        title.append(i.name)
-        print(i.name)
 
     return {"snippets": [i.serialize for i in show_snippet_array]}
 
@@ -76,6 +55,7 @@ def get_snippet(id):
 
     elif snippet.visibility == PRIVATE and snippet.created_by_username == username:
         return {"snippet": snippet.serialize}
+
     else:
         return {"error": "PRIVATE SNIPPET"}
 
@@ -86,20 +66,23 @@ def create_snippet():
     username = get_jwt_identity()
     user = User.query.filter_by(username=username).first()
 
+    json = request.get_json()
+
     if not user:
         return {"error": "No user found"}
 
     user_email = user.email
 
-    snippet_title = request.form['title']
+    snippet_title = json.get('title')
 
     # Check if the title exists before!
-    if does_snippet_exist(title):
-        return render_template('new_snippet.html', error="Title exists")
 
-    snippet_desc = request.form['desc']
-    snippet_code = request.form['code']
-    visibility = request.form['visibility']
+    if does_snippet_exist(snippet_title):
+        return {"error":"Title exists"}
+
+    snippet_desc = json.get('desc')
+    snippet_code = json.get('code')
+    visibility = json.get('visibility')
     created_date = date.today().strftime("%d/%m/%y")
 
     snippet_visibility = PRIVATE
@@ -117,7 +100,7 @@ def create_snippet():
                       created_date=created_date,
                       likes=0,
                       comments='',
-                      created_by_username=username, 
+                      created_by_username=username,
                       snippet_id=snippet_id)
 
     db.session.add(snippet)

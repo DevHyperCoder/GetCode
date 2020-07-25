@@ -1,7 +1,8 @@
 {% extends "layout.html" %} {%block title %} Delete {{name}}? {%endblock%} {%block body%} {% if email_error %}
 <div class="alert alert-warning alert-dismissible fade show">
     <strong>Error!</strong>
-    <p>You don't seem to be the owner of this snippet.<a href="{{url_for('authentication_views.login')}}"> Try logging in</a> </p>
+    <p>You don't seem to be the owner of this snippet.<a href="{{url_for('authentication_views.login')}}"> Try logging
+            in</a> </p>
     <button type="button" class="close" data-dismiss="alert">&times;</button>
 </div>
 {% else %}
@@ -14,7 +15,13 @@
         <p>The snippet names don't match!!</p>
         <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
+    {% endif %} {% if snippet_error %}
+    <div class="alert alert-warning alert-dismissible fade show">
+        <strong>Error!</strong>
+        <p>We couldnt find the snippet you requested!</p>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
     {% endif %}
+
     <input type="submit">
-</form>
-{% endif %} {%endblock%}
+</form>{} {% endif %} {%endblock%}

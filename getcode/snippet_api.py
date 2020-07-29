@@ -166,3 +166,34 @@ def edit_snippet(id):
     db.session.commit()
 
     return {"success": "Snippet updated"}
+
+@snippet_api.route("/api/snippet/<id>/like")
+@jwt_required
+def snippet_like():
+    username = get_jwt_identity()
+
+    user = User.query.filter_by(username=username).first()
+    email = user.email
+    snippet = Snippet.query.filter_by(id=id).first()
+
+    old_liked =snippet.liked_users
+    if old_liked is not None and old_liked.__contains__(email):
+        return {"error":"Already liked"}
+
+
+    liked = ""
+    if old_liked == "" or old_liked == None:
+        # without comma
+        liked = email
+    else:
+        string = ","+email
+        liked = old_liked+string
+    snippet.liked_users = liked
+    snippet.likes = snippet.likes + 1
+    db.session.add(snippet)
+    db.session.commit()
+    return {"success":"Liked"}
+
+
+    
+
